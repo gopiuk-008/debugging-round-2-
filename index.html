@@ -950,6 +950,12 @@
         function submitExam(isAuto = false, isViolation = false) {
             if (!isAuto && !confirm("Are you sure you want to finish the event?")) return;
 
+            const finishBtn = document.getElementById('finish-btn');
+            if (finishBtn) {
+                finishBtn.disabled = true;
+                finishBtn.innerText = "Submitting...";
+            }
+
             examStarted = false;
             const endTime = new Date();
             const diff = Math.floor((endTime - startTime) / 1000);
@@ -1018,11 +1024,29 @@
                 const result = await response.json();
                 if (response.ok) {
                     console.log("Database submission successful:", result);
+                    const finishBtn = document.getElementById('finish-btn');
+                    if (finishBtn) {
+                        finishBtn.innerText = "Submitted ✅";
+                        finishBtn.style.background = "var(--accent-green)";
+                    }
+                    alert("Test completed successfully. Your results have been recorded.");
                 } else {
                     console.error("Database submission failed:", result.error);
+                    alert("Submission failed: " + result.error);
+                    const finishBtn = document.getElementById('finish-btn');
+                    if (finishBtn) {
+                        finishBtn.disabled = false;
+                        finishBtn.innerText = "Retry Submission";
+                    }
                 }
             } catch (error) {
                 console.error("Error submitting to database:", error);
+                alert("An error occurred during submission. Please check your connection.");
+                const finishBtn = document.getElementById('finish-btn');
+                if (finishBtn) {
+                    finishBtn.disabled = false;
+                    finishBtn.innerText = "Retry Submission";
+                }
             }
         }
 
