@@ -677,6 +677,12 @@
                             <div class="stat-label">Problems Attempted</div>
                             <div id="sum-solved">0/10</div>
                         </div>
+                        <div class="stat-box" id="sum-db-box" style="display: none;">
+                            <div class="stat-label">Database Record ID</div>
+                            <div id="sum-db-id"
+                                style="font-size: 0.75rem; color: var(--accent-green); font-family: var(--font-code);">
+                                --</div>
+                        </div>
                     </div>
                 </div>
 
@@ -1071,6 +1077,11 @@
                 const result = await response.json();
                 if (response.ok) {
                     console.log("Database submission successful:", result);
+
+                    // Show Record ID to user
+                    document.getElementById('sum-db-box').style.display = 'block';
+                    document.getElementById('sum-db-id').innerText = result.id;
+
                     const finishBtn = document.getElementById('finish-btn');
                     if (finishBtn) {
                         finishBtn.innerText = "Submitted ✅";
