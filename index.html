@@ -981,6 +981,22 @@
             cp.classList.toggle('hidden');
         }
 
+        function formatErrorMessage(msg) {
+            if (!msg) return "";
+            // Remove "Exception in thread "main" "
+            let formatted = msg.replace(/Exception in thread "main" /g, '');
+            // Remove common Java package prefixes
+            formatted = formatted.replace(/java\.lang\.|java\.util\./g, '');
+            // Remove specific line/file location pointers
+            formatted = formatted.replace(/at .*?\(.*?\)/g, ''); // at Main.main(Main.java:5)
+            formatted = formatted.replace(/\(.*?\.java:.*?\)/g, ''); // (Main.java:5)
+            formatted = formatted.replace(/:[0-9]+/g, ''); // :5
+            // Remove "Main.main" or similar method references
+            formatted = formatted.replace(/[a-zA-Z0-9_$]+\.[a-zA-Z0-9_$]+\s/g, '');
+
+            return formatted.trim();
+        }
+
         function runCode() {
             const p = PROBLEMS[activeProbIdx];
             const currentCode = document.getElementById('code-editor').value;
@@ -991,7 +1007,8 @@
 
             setTimeout(() => {
                 if (currentCode.trim() === p.initialCode.trim()) {
-                    out.innerHTML += `<span class="error-text">${p.bugOutput}</span>`;
+                    const cleanError = formatErrorMessage(p.bugOutput);
+                    out.innerHTML += `<span class="error-text">Error: ${cleanError}</span>`;
                 } else {
                     out.innerHTML += `<span class="success-text">Output Match! Bug potentially resolved.\nVerification passed for hidden test cases.</span>`;
                     document.getElementById(`dot-${p.id}`).classList.add('solved');
