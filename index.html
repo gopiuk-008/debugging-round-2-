@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeetCode Debug | College Event 2026</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #1a1a1a;
+            --bg-workspace: #282828;
+            --bg-pane: #262626;
+            --accent-orange: #ffa116;
+            --accent-green: #2db55d;
+            --accent-blue: #007aff;
+            --text-primary: #eff1f6f2;
+            --text-secondary: #eff1f699;
+            --border: #3e3e3e;
+            --font-main: 'Inter', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            height: 50px;
+            background: var(--bg-pane);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.5rem;
+            z-index: 100;
+        }
+
+        .logo {
+            font-weight: 700;
+            color: var(--accent-orange);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timer {
+            font-family: var(--font-code);
+            font-weight: 600;
+            color: var(--accent-orange);
+        }
+
+        .main-workspace {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Registration Screen */
+        #registration-screen {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .reg-card {
+            background: var(--bg-pane);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .reg-card h2 {
+            margin-bottom: 0.5rem;
+            color: var(--accent-orange);
+        }
+
+        .reg-card p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #333;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: white;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent-orange);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--accent-orange);
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Competition Workspace */
+        .workspace-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr 1fr;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-pane);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .problem-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .problem-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .problem-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .problem-item.active {
+            background: rgba(255, 161, 22, 0.1);
+            border-left: 3px solid var(--accent-orange);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #444;
+        }
+
+        .status-dot.solved {
+            background: var(--accent-green);
+        }
+
+        /* Pane Styling */
+        .pane {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-right: 1px solid var(--border);
+        }
+
+        .pane-header {
+            height: 40px;
+            background: var(--bg-workspace);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Description Pane */
+        #description-pane {
+            background: var(--bg-dark);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        #description-pane h2 {
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty.easy {
+            color: var(--accent-green);
+            background: rgba(45, 181, 93, 0.1);
+        }
+
+        .difficulty.medium {
+            color: var(--accent-orange);
+            background: rgba(255, 161, 22, 0.1);
+        }
+
+        .desc-content p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .example-block {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-family: var(--font-code);
+            font-size: 0.85rem;
+        }
+
+        /* Editor Pane */
+        .editor-container {
+            flex: 1;
+            position: relative;
+            background: #1e1e1e;
+        }
+
+        textarea#code-editor {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            color: #d4d4d4;
+            font-family: var(--font-code);
+            font-size: 14px;
+            border: none;
+            padding: 1.5rem;
+            resize: none;
+            outline: none;
+        }
+
+        /* Console Pane */
+        .console-pane {
+            height: 180px;
+            background: var(--bg-pane);
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transition: height 0.3s;
+        }
+
+        .console-output {
+            flex: 1;
+            background: #000;
+            color: #fff;
+            font-family: var(--font-code);
+            padding: 1rem;
+            font-size: 0.85rem;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .error-text {
+            color: #ff5f56;
+        }
+
+        .success-text {
+            color: var(--accent-green);
+        }
+
+        /* Controls */
+        .workspace-footer {
+            height: 50px;
+            background: var(--bg-pane);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .control-btns {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-run {
+            background: #333;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .btn-submit {
+            background: var(--accent-green);
+            color: white;
+            padding: 0.4rem 1.5rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Summary Screen */
+        #summary-screen {
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 2rem;
+            overflow-y: auto;
+        }
+
+        .summary-card {
+            background: var(--bg-pane);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .stat-box {
+            background: #333;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Rules Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: var(--bg-pane);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .rules-list {
+            text-align: left;
+            margin: 1.5rem 0;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .rules-list li {
+            margin-bottom: 0.8rem;
+        }
+
+        /* Violation Warning */
+        #violation-warning {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff5f56;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            font-weight: 600;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translate(-50%, -100%);
+            }
+
+            to {
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <img src="https://leetcode.com/_next/static/images/logo-ff2b712834cf2648aed76c46a67041ca.png" width="24"
+                    height="24" style="filter: brightness(0) invert(1) hue-rotate(180deg) saturate(5);">
+                INEXON'26 DEBUG
+            </div>
+            <div id="user-display" class="hidden" style="display: flex; align-items: center; gap: 1rem;">
+                <span id="header-name" style="font-size: 0.9rem; font-weight: 600;"></span>
+                <span id="header-code"
+                    style="color: var(--accent-orange); font-family: var(--font-code); background: rgba(255,161,22,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;"></span>
+                <div id="violation-count"
+                    style="color: #ff5f56; font-size: 0.8rem; font-weight: 600; background: rgba(255, 95, 86, 0.1); padding: 0.2rem 0.5rem; border-radius: 4px; display: none;">
+                    Warnings: 1/2</div>
+                <div class="timer" id="timer-display">30:00</div>
+            </div>
+        </header>
+
+        <div id="violation-warning">WARNING: Tab switching is restricted! First violation recorded.</div>
+
+        <div id="rules-modal" class="modal-overlay">
+            <div class="modal-card">
+                <h2 style="color: var(--accent-orange);">Competition Rules</h2>
+                <div class="rules-list">
+                    <ul>
+                        <li>This is a time-restricted debugging challenge (30 minutes).</li>
+                        <li><strong>Standard Lock:</strong> Upon agreement, the screen will enter fullscreen mode.</li>
+                        <li><strong>Strict Surveillance:</strong> You are restricted from switching tabs or windows.
+                        </li>
+                        <li><strong>Violations:</strong>
+                            <ul>
+                                <li>1st violation: A warning message will appear.</li>
+                                <li>2nd violation: Your session will be <strong>terminated immediately</strong>.</li>
+                            </ul>
+                        </li>
+                        <li>Ensure a stable internet connection before starting.</li>
+                    </ul>
+                </div>
+                <button class="btn" onclick="agreeRules()">I Agree & Start Test</button>
+            </div>
+        </div>
+
+        <main class="main-workspace">
+            <!-- 1. Registration Screen -->
+            <section id="registration-screen" class="screen active">
+                <div class="reg-card">
+                    <h2>Event Registration</h2>
+                    <p>Enter your details to start the debugging challenge</p>
+
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="reg-name" placeholder="Name" oninput="validateReg()">
+                    </div>
+                    <div class="input-group">
+                        <label>Roll Number</label>
+                        <input type="text" id="reg-roll" placeholder="Roll No" oninput="validateReg()">
+                    </div>
+                    <div class="input-group">
+                        <label>Department</label>
+                        <select id="reg-dept" onchange="validateReg()">
+                            <option value="">Select Dept</option>
+                            <option value="CSE">CSE</option>
+                            <option value="IT">IT</option>
+                            <option value="ECE">ECE</option>
+                            <option value="MECH">MECH</option>
+                        </select>
+                    </div>
+                    <button id="start-btn" class="btn" disabled onclick="startChallenge()">Enter Workspace</button>
+                </div>
+            </section>
+
+            <!-- 2. Competition Workspace -->
+            <section id="competition-screen" class="screen">
+                <div class="workspace-layout">
+                    <!-- Sidebar -->
+                    <aside class="sidebar">
+                        <div class="sidebar-header">PROBLEMS (10)</div>
+                        <div class="problem-list" id="problem-list">
+                            <!-- Items generated by JS -->
+                        </div>
+                    </aside>
+
+                    <!-- Description Pane -->
+                    <div class="pane">
+                        <div class="pane-header">Description</div>
+                        <div id="description-pane">
+                            <h2 id="prob-title">Selecting Problem...</h2>
+                            <div id="prob-meta"></div>
+                            <div id="prob-desc" class="desc-content">
+                                <p>Select a problem from the left to begin.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Editor Pane -->
+                    <div class="pane" style="border-right: none;">
+                        <div class="pane-header">Code Editor</div>
+                        <div class="editor-container">
+                            <textarea id="code-editor" spellcheck="false"
+                                placeholder="// Write/Fix code here..."></textarea>
+                        </div>
+
+                        <div class="console-pane" id="console-pane">
+                            <div class="pane-header" style="justify-content: space-between;">
+                                <span>Console</span>
+                                <span style="cursor: pointer;" onclick="toggleConsole()">✖</span>
+                            </div>
+                            <div class="console-output" id="console-output">
+                                Click "Run" to see output.
+                            </div>
+                        </div>
+
+                        <div class="workspace-footer">
+                            <button class="btn-run" onclick="toggleConsole()">Console</button>
+                            <div class="control-btns">
+                                <button class="btn-run" onclick="runCode()">Run Code</button>
+                                <button id="next-btn" class="btn-submit" onclick="nextProblem()"
+                                    style="background: var(--accent-blue);">Next Question</button>
+                                <button id="finish-btn" class="btn-submit" onclick="submitExam()"
+                                    style="display: none;">Finish Event</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Summary Screen -->
+            <section id="summary-screen" class="screen">
+                <div class="summary-card">
+                    <h1 style="color: var(--accent-green); margin-bottom: 1rem;">Submission Recorded</h1>
+                    <p style="color: var(--text-secondary);">Congratulations on completing the 2026 Debugging Event.</p>
+
+                    <div class="summary-stats">
+                        <div class="stat-box">
+                            <div class="stat-label">Participant</div>
+                            <div id="sum-name" style="font-weight: 600;">--</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Unique ID</div>
+                            <div id="sum-code" style="color: var(--accent-orange);">--</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Duration</div>
+                            <div id="sum-duration">--</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Problems Attempted</div>
+                            <div id="sum-solved">0/10</div>
+                        </div>
+                    </div>
+
+                    <button class="btn" style="margin-top: 2rem; width: auto; padding: 0.75rem 2rem;"
+                        onclick="location.reload()">Return Home</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // ==========================================
+        // PROBLEMS DATA
+        // ==========================================
+        const PROBLEMS = [
+            {
+                id: 1, lang: 'Java', title: 'Fibonacci Sequence', diff: 'Easy',
+                desc: 'Fix the loop termination condition to correctly generate the first 10 Fibonacci numbers.',
+                example: 'Output: 0 1 1 2 3 5 8 13 21 34',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int n = 10, a = 0, b = 1;\n        for (int i = 1; i <= n; i++) {\n            System.out.print(a + " ");\n            int next = a + b;\n            a = b;\n            b = next;\n            if (i == 9) break; // Bug: terminates early\n        }\n    }\n}',
+                bugOutput: 'Console: 0 1 1 2 3 5 8 13 21'
+            },
+            {
+                id: 2, lang: 'Java', title: 'Find Maximum', diff: 'Easy',
+                desc: 'There is an ArrayIndexOutOfBoundsException in this code. Fix it.',
+                example: 'Input: [3, 7, 2, 9, 5]\nOutput: 9',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int[] arr = {3, 7, 2, 9, 5};\n        int max = arr[0];\n        for (int i = 1; i <= arr.length; i++) {\n            if (arr[i] > max) max = arr[i];\n        }\n        System.out.println(max);\n    }\n}',
+                bugOutput: 'Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5'
+            },
+            {
+                id: 3, lang: 'Java', title: 'Login Validation', diff: 'Easy',
+                desc: 'Fix the logic error in string comparison so the password check works correctly.',
+                example: 'Pass: "admin123"\nOutput: Access Granted',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        String input = new String("admin123");\n        if (input == "admin123") {\n            System.out.println("Access Granted");\n        } else {\n            System.out.println("Access Denied");\n        }\n    }\n}',
+                bugOutput: 'Console: Access Denied'
+            },
+            {
+                id: 4, lang: 'Java', title: 'Area Calculation', diff: 'Medium',
+                desc: 'The Rectangle class is supposed to override getArea(), but it returns the wrong value. Fix the inheritance issue.',
+                example: 'Width: 5, Height: 4\nOutput: 20',
+                initialCode: 'class Shape {\n    int getArea() { return 0; }\n}\nclass Rectangle extends Shape {\n    int w, h;\n    Rectangle(int w, int h) { this.w = w; this.h = h; }\n    int getArea(int x) { return w * h; } // Bug: Overloading instead of Overriding\n}\npublic class Main {\n    public static void main(String[] args) {\n        Shape s = new Rectangle(5, 4);\n        System.out.println(s.getArea());\n    }\n}',
+                bugOutput: 'Console: 0'
+            },
+            {
+                id: 5, lang: 'Java', title: 'Safe Division', diff: 'Medium',
+                desc: 'Fix the exception handling so the program catches the specific error and prints "Cannot divide by zero".',
+                example: '10 / 0\nOutput: Cannot divide by zero',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        try {\n            int x = 10 / 0;\n            System.out.println(x);\n        } catch (NullPointerException e) {\n            System.out.println("Error occurred");\n        }\n    }\n}',
+                bugOutput: 'Exception in thread "main" java.lang.ArithmeticException: / by zero'
+            },
+            {
+                id: 6, lang: 'Java', title: 'Factorial Recursion', diff: 'Medium',
+                desc: 'The recursive function is missing an important condition, causing a StackOverflowError.',
+                example: 'Input: 5\nOutput: 120',
+                initialCode: 'public class Main {\n    static int fact(int n) {\n        return n * fact(n - 1);\n    }\n    public static void main(String[] args) {\n        System.out.println(fact(5));\n    }\n}',
+                bugOutput: 'java.lang.StackOverflowError'
+            },
+            {
+                id: 7, lang: 'Java', title: 'Leap Year Logic', diff: 'Medium',
+                desc: 'Correct the Leap Year logic. A year is leap if it is divisible by 4, but not 100, unless it is also divisible by 400.',
+                example: 'Input: 1900\nOutput: false',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int year = 1900;\n        if (year % 4 == 0) {\n            System.out.println("true");\n        } else {\n            System.out.println("false");\n        }\n    }\n}',
+                bugOutput: 'Console: true (Expected: false)'
+            },
+            {
+                id: 8, lang: 'Java', title: 'Unique ID Generator', diff: 'Medium',
+                desc: 'Static variable is being misused. Each student should have a unique ID starting from 1.',
+                example: 'Student 1: 1, Student 2: 2\nOutput: 1 2',
+                initialCode: 'class Student {\n    static int idCount = 1;\n    int id;\n    Student() { id = idCount; }\n    static void increment() { idCount++; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Student s1 = new Student();\n        Student s2 = new Student();\n        System.out.println(s1.id + " " + s2.id);\n    }\n}',
+                bugOutput: 'Console: 1 1'
+            },
+            {
+                id: 9, lang: 'Java', title: 'Scanner Bug', diff: 'Medium',
+                desc: 'The code fails to read the string input correctly after reading an integer. Fix the buffer issue.',
+                example: 'Input: 25, "John"\nOutput: Age: 25, Name: John',
+                initialCode: 'import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner("25\\nJohn");\n        int age = sc.nextInt();\n        String name = sc.nextLine();\n        System.out.println("Age: " + age + ", Name: " + name);\n    }\n}',
+                bugOutput: 'Console: Age: 25, Name: '
+            },
+            {
+                id: 10, lang: 'Java', title: 'List Removal', diff: 'Medium',
+                desc: 'Identify and fix the ConcurrentModificationException when removing negative numbers from the list.',
+                example: 'Input: [1, -2, 3]\nOutput: [1, 3]',
+                initialCode: 'import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        List<Integer> list = new ArrayList<>(Arrays.asList(1, -2, 3));\n        for (Integer n : list) {\n            if (n < 0) list.remove(n);\n        }\n        System.out.println(list);\n    }\n}',
+                bugOutput: 'java.util.ConcurrentModificationException'
+            }
+        ];
+
+        // ==========================================
+        // STATE
+        // ==========================================
+        let student = { name: '', roll: '', dept: '', code: '' };
+        let activeProbIdx = -1;
+        let userSubmissions = {}; // id -> code
+        let timeLeft = 30 * 60;
+        let timerStarted = false;
+        let startTime = null;
+        let violations = 0;
+        let examStarted = false;
+
+        // ==========================================
+        // CORE LOGIC
+        // ==========================================
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function validateReg() {
+            const name = document.getElementById('reg-name').value;
+            const roll = document.getElementById('reg-roll').value;
+            const dept = document.getElementById('reg-dept').value;
+            document.getElementById('start-btn').disabled = !(name && roll && dept);
+        }
+
+        function startChallenge() {
+            student.name = document.getElementById('reg-name').value;
+            student.roll = document.getElementById('reg-roll').value;
+            student.dept = document.getElementById('reg-dept').value;
+            student.code = `DBG26-${student.dept.substring(0, 2)}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+            // Show rules modal instead of workspace directly
+            document.getElementById('rules-modal').classList.add('active');
+        }
+
+        function agreeRules() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+
+            document.getElementById('rules-modal').classList.remove('active');
+            enterWorkspace();
+        }
+
+        function enterWorkspace() {
+            startTime = new Date();
+            examStarted = true;
+
+            // Shuffle problems for this session
+            shuffleArray(PROBLEMS);
+
+            // Update UI
+            document.getElementById('header-name').innerText = student.name;
+            document.getElementById('header-code').innerText = student.code;
+            document.getElementById('user-display').classList.remove('hidden');
+            document.getElementById('registration-screen').classList.remove('active');
+            document.getElementById('competition-screen').classList.add('active');
+
+            initProblemsList();
+            startTimer();
+            selectProblem(0);
+            setupSecurity();
+        }
+
+        function setupSecurity() {
+            window.addEventListener('blur', recordViolation);
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden') {
+                    recordViolation();
+                }
+            });
+
+            // Disable Right-Click
+            document.addEventListener('contextmenu', (e) => {
+                if (examStarted) e.preventDefault();
+            });
+
+            // Disable Copy, Paste, and Cut
+            document.addEventListener('copy', (e) => {
+                if (examStarted) e.preventDefault();
+            });
+            document.addEventListener('paste', (e) => {
+                if (examStarted) e.preventDefault();
+            });
+            document.addEventListener('cut', (e) => {
+                if (examStarted) e.preventDefault();
+            });
+
+            // Disable common shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (!examStarted) return;
+
+                // Disable Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+S, Ctrl+U, Ctrl+P
+                if (e.ctrlKey && (['c', 'v', 'x', 's', 'u', 'p'].includes(e.key.toLowerCase()))) {
+                    e.preventDefault();
+                }
+
+                // Disable F12 (DevTools)
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                }
+
+                // Disable Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (DevTools)
+                if (e.ctrlKey && e.shiftKey && (['i', 'j', 'c'].includes(e.key.toLowerCase()))) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        function recordViolation() {
+            if (!examStarted) return;
+            violations++;
+
+            const countDisplay = document.getElementById('violation-count');
+            countDisplay.innerText = `Warnings: ${violations}/2`;
+            countDisplay.style.display = 'block';
+
+            if (violations === 1) {
+                const warning = document.getElementById('violation-warning');
+                warning.innerText = "Warning: Do not switch tabs during the assessment. Next violation will terminate your session.";
+                warning.style.display = 'block';
+                setTimeout(() => {
+                    warning.style.display = 'none';
+                }, 5000);
+            } else if (violations >= 2) {
+                terminateSession();
+            }
+        }
+
+        function terminateSession() {
+            examStarted = false;
+            alert("Session terminated due to multiple tab switching violations.");
+            submitExam(true, true);
+        }
+
+        function initProblemsList() {
+            const list = document.getElementById('problem-list');
+            list.innerHTML = '';
+            PROBLEMS.forEach((p, i) => {
+                const div = document.createElement('div');
+                div.className = 'problem-item';
+                div.id = `prob-item-${i}`;
+                // Direct selection disabled during exam
+                div.onclick = () => {
+                    if (!examStarted) selectProblem(i);
+                    else alert("Sequence navigation only. Use the Next button.");
+                };
+                div.innerHTML = `<span class="status-dot" id="dot-${p.id}"></span> ${i + 1}. [${p.lang}] ${p.title}`;
+                list.appendChild(div);
+            });
+        }
+
+        function selectProblem(idx) {
+            if (activeProbIdx !== -1) {
+                userSubmissions[PROBLEMS[activeProbIdx].id] = document.getElementById('code-editor').value;
+            }
+
+            activeProbIdx = idx;
+            const p = PROBLEMS[idx];
+
+            document.querySelectorAll('.problem-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`prob-item-${idx}`).classList.add('active');
+
+            document.getElementById('prob-title').innerText = `${idx + 1}. ${p.title}`;
+            document.getElementById('prob-meta').innerHTML = `<span class="difficulty ${p.diff.toLowerCase()}">${p.diff}</span>`;
+            document.getElementById('prob-desc').innerHTML = `
+                <p>${p.desc}</p>
+                <div class="example-block">${p.example}</div>
+            `;
+
+            document.getElementById('code-editor').value = userSubmissions[p.id] || p.initialCode;
+            document.getElementById('console-output').innerText = 'Click "Run Code" to see output.';
+
+            // Visibility of Next vs Finish
+            const nextBtn = document.getElementById('next-btn');
+            const finishBtn = document.getElementById('finish-btn');
+
+            if (activeProbIdx === PROBLEMS.length - 1) {
+                nextBtn.style.display = 'none';
+                finishBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                finishBtn.style.display = 'none';
+            }
+        }
+
+        function nextProblem() {
+            if (activeProbIdx < PROBLEMS.length - 1) {
+                selectProblem(activeProbIdx + 1);
+            }
+        }
+
+        function toggleConsole() {
+            const cp = document.getElementById('console-pane');
+            cp.classList.toggle('hidden');
+        }
+
+        function runCode() {
+            const p = PROBLEMS[activeProbIdx];
+            const currentCode = document.getElementById('code-editor').value;
+            const out = document.getElementById('console-output');
+
+            document.getElementById('console-pane').classList.remove('hidden');
+            out.innerHTML = '<span style="color: grey;">Compiling and running...</span>\n\n';
+
+            setTimeout(() => {
+                if (currentCode.trim() === p.initialCode.trim()) {
+                    out.innerHTML += `<span class="error-text">${p.bugOutput}</span>`;
+                } else {
+                    out.innerHTML += `<span class="success-text">Output Match! Bug potentially resolved.\nVerification passed for hidden test cases.</span>`;
+                    document.getElementById(`dot-${p.id}`).classList.add('solved');
+                    userSubmissions[p.id] = currentCode;
+                }
+            }, 800);
+        }
+
+        function submitExam(isAuto = false, isViolation = false) {
+            if (!isAuto && !confirm("Are you sure you want to finish the event?")) return;
+
+            examStarted = false;
+            const endTime = new Date();
+            const diff = Math.floor((endTime - startTime) / 1000);
+            const mins = Math.floor(diff / 60);
+            const secs = diff % 60;
+
+            document.getElementById('sum-name').innerText = student.name;
+            document.getElementById('sum-code').innerText = student.code;
+            document.getElementById('sum-duration').innerText = `${mins}m ${secs}s`;
+            document.getElementById('sum-solved').innerText = `${Object.keys(userSubmissions).length}/10`;
+
+            const summaryCard = document.querySelector('.summary-card');
+
+            if (isViolation) {
+                const violMsg = document.createElement('div');
+                violMsg.style.background = '#ff5f5633';
+                violMsg.style.color = '#ff5f56';
+                violMsg.style.padding = '1rem';
+                violMsg.style.borderRadius = '8px';
+                violMsg.style.margin = '1rem 0';
+                violMsg.style.border = '1px solid #ff5f56';
+                violMsg.innerHTML = "<strong>CRITICAL: Session Terminated</strong><br>Multiple tab-switching violations detected.";
+                summaryCard.insertBefore(violMsg, document.querySelector('.summary-stats'));
+                document.querySelector('#summary-screen h1').innerText = "Session Terminated";
+                document.querySelector('#summary-screen h1').style.color = "#ff5f56";
+            } else if (isAuto) {
+                const autoMsg = document.createElement('p');
+                autoMsg.style.color = '#ff5f56';
+                autoMsg.style.marginTop = '1rem';
+                autoMsg.innerText = "Exam was auto-submitted as the time was up.";
+                summaryCard.insertBefore(autoMsg, document.querySelector('.summary-stats'));
+            }
+
+            document.getElementById('competition-screen').classList.remove('active');
+            document.getElementById('summary-screen').classList.add('active');
+            document.getElementById('user-display').classList.add('hidden');
+
+            // Store result in Database
+            submitResultToDB(diff);
+
+            // Exit fullscreen if active
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+        }
+
+        async function submitResultToDB(timeSpentSeconds) {
+            const data = {
+                name: student.name,
+                rollNumber: student.roll,
+                department: student.dept,
+                uniqueCode: student.code,
+                timeSpentSeconds: timeSpentSeconds,
+                solvedCount: Object.keys(userSubmissions).length
+            };
+
+            console.log("Submitting to database:", data);
+
+            try {
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    console.log("Database submission successful:", result);
+                } else {
+                    console.error("Database submission failed:", result.error);
+                }
+            } catch (error) {
+                console.error("Error submitting to database:", error);
+            }
+        }
+
+        function startTimer() {
+            const display = document.getElementById('timer-display');
+            const interval = setInterval(() => {
+                timeLeft--;
+                const m = Math.floor(timeLeft / 60);
+                const s = timeLeft % 60;
+                display.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 300) display.style.color = '#ff5f56';
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    submitExam(true);
+                }
+            }, 1000);
+        }
+
+    </script>
+</body>
+
+</html>
