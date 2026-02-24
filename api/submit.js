@@ -1,4 +1,21 @@
-import { neon } from '@neondatabase/serverless';
+import mongoose from 'mongoose';
+
+const ResultSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    rollNumber: { type: String, required: true },
+    department: String,
+    uniqueCode: { type: String, required: true, unique: true },
+    timeSpentSeconds: { type: Number, required: true },
+    solvedCount: { type: Number, required: true },
+    submittedAt: { type: Date, default: Date.now }
+});
+
+const Result = mongoose.models.Result || mongoose.model('Result', ResultSchema);
+
+const connectDB = async () => {
+    if (mongoose.connection.readyState >= 1) return;
+    return mongoose.connect(process.env.MONGODB_URI);
+};
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -7,23 +24,30 @@ export default async function handler(req, res) {
 
     const { name, rollNumber, department, uniqueCode, timeSpentSeconds, solvedCount } = req.body;
 
-    // Basic validation
     if (!name || !rollNumber || !uniqueCode) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
     try {
-        const sql = neon(process.env.DATABASE_URL);
+        await connectDB();
 
-        const result = await sql`
-      INSERT INTO results (name, roll_number, department, unique_code, time_spent_seconds, solved_count)
-      VALUES (${name}, ${rollNumber}, ${department}, ${uniqueCode}, ${timeSpentSeconds}, ${solvedCount})
-      RETURNING id
-    `;
+        const newResult = new Result({
+            name,
+            rollNumber,
+            department,
+            uniqueCode,
+            timeSpentSeconds,
+            solvedCount
+        });
 
-        return res.status(200).json({ message: 'Result stored successfully', id: result[0].id });
+        await newResult.save();
+
+        return res.status(200).json({ message: 'Result stored successfully', id: newResult._id });
     } catch (error) {
         console.error('Database Error:', error);
+        if (error.code === 11000) {
+            return res.status(400).json({ error: 'You have already submitted your results.' });
+        }
         return res.status(500).json({ error: 'Failed to store result', details: error.message });
     }
 }
