@@ -781,6 +781,7 @@
         let student = { name: '', roll: '', dept: '', code: '' };
         let activeProbIdx = -1;
         let userSubmissions = {}; // id -> code
+        let solvedProblemIds = new Set(); // Track only correctly solved problems
         let timeLeft = 30 * 60;
         let timerStarted = false;
         let startTime = null;
@@ -1009,11 +1010,14 @@
                 if (currentCode.trim() === p.initialCode.trim()) {
                     const cleanError = formatErrorMessage(p.bugOutput);
                     out.innerHTML += `<span class="error-text">Error: ${cleanError}</span>`;
+                    solvedProblemIds.delete(p.id); // Remove if it was solved but now reverts to bug
+                    document.getElementById(`dot-${p.id}`).classList.remove('solved');
                 } else {
                     out.innerHTML += `<span class="success-text">Output Match! Bug potentially resolved.\nVerification passed for hidden test cases.</span>`;
                     document.getElementById(`dot-${p.id}`).classList.add('solved');
-                    userSubmissions[p.id] = currentCode;
+                    solvedProblemIds.add(p.id);
                 }
+                userSubmissions[p.id] = currentCode;
             }, 800);
         }
 
@@ -1035,7 +1039,7 @@
             document.getElementById('sum-name').innerText = student.name;
             document.getElementById('sum-code').innerText = student.code;
             document.getElementById('sum-duration').innerText = `${mins}m ${secs}s`;
-            document.getElementById('sum-solved').innerText = `${Object.keys(userSubmissions).length}/10`;
+            document.getElementById('sum-solved').innerText = `${solvedProblemIds.size}/10`;
 
             const summaryCard = document.querySelector('.summary-card');
 
@@ -1079,7 +1083,7 @@
                 department: student.dept,
                 uniqueCode: student.code,
                 timeSpentSeconds: timeSpentSeconds,
-                solvedCount: Object.keys(userSubmissions).length
+                solvedCount: solvedProblemIds.size
             };
 
             console.log("Submitting to database:", data);
