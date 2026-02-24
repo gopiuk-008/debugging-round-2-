@@ -58,56 +58,54 @@
         .logo {
             font-weight: 700;
             color: var(--accent-orange);
-            font-size: 1.2rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 1.1rem;
+            letter-spacing: -0.5px;
         }
 
         .timer {
             font-family: var(--font-code);
             font-weight: 600;
-            color: var(--accent-orange);
-        }
-
-        .main-workspace {
-            flex: 1;
-            display: flex;
-            overflow: hidden;
+            color: var(--text-primary);
+            background: #333;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
         }
 
         /* Screens */
         .screen {
             display: none;
+            height: calc(100vh - 50px);
             width: 100%;
-            height: 100%;
         }
 
         .screen.active {
             display: flex;
         }
 
-        /* Registration Screen */
+        /* Registration */
         #registration-screen {
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 2rem;
-            text-align: center;
+            align-items: center;
+            background: radial-gradient(circle at 50% 50%, #2c2c2c 0%, #1a1a1a 100%);
         }
 
         .reg-card {
             background: var(--bg-pane);
             padding: 2.5rem;
             border-radius: 12px;
-            border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             width: 100%;
             max-width: 450px;
+            border: 1px solid var(--border);
         }
 
         .reg-card h2 {
             margin-bottom: 0.5rem;
-            color: var(--accent-orange);
+            font-size: 1.8rem;
         }
 
         .reg-card p {
@@ -117,58 +115,73 @@
         }
 
         .input-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
+            margin-bottom: 1.2rem;
         }
 
         .input-group label {
             display: block;
             margin-bottom: 0.5rem;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 600;
             color: var(--text-secondary);
         }
 
         .input-group input,
         .input-group select {
             width: 100%;
-            padding: 0.75rem 1rem;
             background: #333;
             border: 1px solid var(--border);
-            border-radius: 6px;
+            padding: 0.8rem;
+            border-radius: 8px;
             color: white;
+            font-size: 0.95rem;
             outline: none;
+            transition: border-color 0.2s;
         }
 
-        .input-group input:focus {
+        .input-group input:focus,
+        .input-group select:focus {
             border-color: var(--accent-orange);
         }
 
         .btn {
             width: 100%;
-            padding: 0.75rem;
-            background: var(--accent-orange);
-            color: #000;
+            padding: 0.8rem;
+            border-radius: 8px;
             border: none;
-            border-radius: 6px;
+            background: var(--accent-orange);
+            color: black;
             font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: transform 0.1s, filter 0.2s;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
         }
 
         .btn:disabled {
-            opacity: 0.5;
+            background: #444;
+            color: #888;
             cursor: not-allowed;
+            filter: none;
         }
 
-        /* Competition Workspace */
+        /* Workspace */
         .workspace-layout {
             display: grid;
-            grid-template-columns: 260px 1fr 1fr;
+            grid-template-columns: 260px 1fr;
             width: 100%;
-            height: 100%;
+            background: var(--bg-workspace);
+            gap: 1px;
         }
 
-        /* Sidebar */
         .sidebar {
             background: var(--bg-pane);
             border-right: 1px solid var(--border);
@@ -178,10 +191,12 @@
 
         .sidebar-header {
             padding: 1rem;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.75rem;
+            font-weight: 700;
             color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
         }
 
         .problem-list {
@@ -190,23 +205,24 @@
         }
 
         .problem-item {
-            padding: 0.75rem 1rem;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border);
             cursor: pointer;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 0.9rem;
+            gap: 0.8rem;
             transition: background 0.2s;
         }
 
         .problem-item:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: #333;
         }
 
         .problem-item.active {
             background: rgba(255, 161, 22, 0.1);
-            border-left: 3px solid var(--accent-orange);
+            color: var(--accent-orange);
+            font-weight: 600;
         }
 
         .status-dot {
@@ -220,36 +236,114 @@
             background: var(--accent-green);
         }
 
-        /* Pane Styling */
+        .workspace-main {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 1px;
+            background: var(--border);
+        }
+
         .pane {
+            background: var(--bg-pane);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            border-right: 1px solid var(--border);
         }
 
         .pane-header {
-            height: 40px;
-            background: var(--bg-workspace);
+            padding: 10px 1.5rem;
+            background: #1e1e1e;
             border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            padding: 0 1rem;
             font-size: 0.85rem;
             font-weight: 600;
             color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 44px;
         }
 
-        /* Description Pane */
-        #description-pane {
-            background: var(--bg-dark);
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .language-dropdown {
+            background: #2b2b2b;
+            color: #e6e6e6;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .language-dropdown:hover {
+            border-color: #666;
+        }
+
+        .language-dropdown:focus {
+            border-color: var(--accent-orange);
+        }
+
+        .btn-action {
+            background: #333;
+            color: white;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            background: #444;
+        }
+
+        .btn-action.run {
+            color: var(--accent-green);
+            background: rgba(45, 181, 93, 0.1);
+            border-color: rgba(45, 181, 93, 0.3);
+        }
+
+        .btn-action.run:hover {
+            background: rgba(45, 181, 93, 0.2);
+        }
+
+        .btn-action.submit {
+            background: var(--accent-blue);
+            border-color: transparent;
+        }
+
+        .btn-action.submit:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-action.finish {
+            background: var(--accent-green);
+            border-color: transparent;
+        }
+
+        .btn-action:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .desc-content {
             padding: 1.5rem;
             overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        #description-pane h2 {
+        .desc-content h2 {
             margin-bottom: 1rem;
-            font-size: 1.25rem;
+            font-size: 1.4rem;
         }
 
         .difficulty {
@@ -257,104 +351,67 @@
             padding: 0.2rem 0.6rem;
             border-radius: 12px;
             font-size: 0.75rem;
+            font-weight: 600;
             margin-bottom: 1rem;
         }
 
         .difficulty.easy {
+            background: rgba(45, 181, 93, 0.15);
             color: var(--accent-green);
-            background: rgba(45, 181, 93, 0.1);
         }
 
         .difficulty.medium {
-            color: var(--accent-orange);
-            background: rgba(255, 161, 22, 0.1);
-        }
-
-        .desc-content p {
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
+            background: rgba(255, 184, 0, 0.15);
+            color: #ffb800;
         }
 
         .example-block {
-            background: rgba(255, 255, 255, 0.05);
+            background: #333;
             padding: 1rem;
             border-radius: 8px;
-            margin-bottom: 1rem;
             font-family: var(--font-code);
+            margin: 1rem 0;
             font-size: 0.85rem;
+            color: #ccc;
         }
 
-        /* Editor Pane */
         .editor-container {
             flex: 1;
             position: relative;
             background: #1e1e1e;
         }
 
-        textarea#code-editor {
+        #code-editor {
             width: 100%;
             height: 100%;
             background: transparent;
-            color: #d4d4d4;
+            color: #dcdcdc;
             font-family: var(--font-code);
             font-size: 14px;
-            border: none;
             padding: 1.5rem;
+            border: none;
             resize: none;
             outline: none;
+            line-height: 1.5;
         }
 
-        /* Console Pane */
         .console-pane {
-            height: 180px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
             background: var(--bg-pane);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-        }
-
-        .language-select {
-            padding: 10px;
-            background: var(--bg-pane);
+            height: 180px;
             border-top: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-
-        .language-select label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #aaa;
-        }
-
-        .language-select select {
-            background: #333;
-            color: white;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 4px 8px;
-            font-size: 0.85rem;
-            outline: none;
-        }
-
-        .language-select select:focus {
-            border-color: var(--accent-orange);
         }
 
         .console-output {
-            flex: 1;
-            background: #000;
-            color: #fff;
+            padding: 1rem 1.5rem;
             font-family: var(--font-code);
-            padding: 1rem;
             font-size: 0.85rem;
+            color: #00ff00;
             overflow-y: auto;
+            flex: 1;
             white-space: pre-wrap;
+            background: #111;
         }
 
         .error-text {
@@ -362,85 +419,10 @@
         }
 
         .success-text {
-            color: var(--accent-green);
+            color: #2db55d;
         }
 
-        /* Controls */
-        .workspace-footer {
-            height: 50px;
-            background: var(--bg-pane);
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 1rem;
-        }
-
-        .control-btns {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn-run {
-            background: #333;
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 4px;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-
-        .btn-submit {
-            background: var(--accent-green);
-            color: white;
-            padding: 0.4rem 1.5rem;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        /* Summary Screen */
-        #summary-screen {
-            flex-direction: column;
-            align-items: center;
-            padding: 4rem 2rem;
-            overflow-y: auto;
-        }
-
-        .summary-card {
-            background: var(--bg-pane);
-            padding: 3rem;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .summary-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-top: 2rem;
-            text-align: left;
-        }
-
-        .stat-box {
-            background: #333;
-            padding: 1rem;
-            border-radius: 8px;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Rules Modal */
+        /* Summary & Overlays */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -463,87 +445,77 @@
             background: var(--bg-pane);
             padding: 2.5rem;
             border-radius: 12px;
-            border: 1px solid var(--border);
             width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
+            max-width: 550px;
+            border: 1px solid var(--border);
         }
 
-        .rules-list {
-            text-align: left;
-            margin: 1.5rem 0;
+        .summary-card {
+            background: var(--bg-pane);
+            padding: 3rem;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 700px;
+            border: 1px solid var(--border);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-box {
+            background: #333;
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
             color: var(--text-secondary);
-            line-height: 1.6;
-            font-size: 0.95rem;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
         }
 
-        .rules-list li {
-            margin-bottom: 0.8rem;
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
         }
 
-        /* Violation Warning */
+        .leaderboard-table th,
+        .leaderboard-table td {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
         #violation-warning {
             position: fixed;
-            top: 20px;
+            top: 2rem;
             left: 50%;
             transform: translateX(-50%);
             background: #ff5f56;
             color: white;
             padding: 1rem 2rem;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
             z-index: 2000;
             display: none;
-            font-weight: 600;
-            animation: slideInDown 0.3s ease-out;
-        }
-
-        @keyframes slideInDown {
-            from {
-                transform: translate(-50%, -100%);
-            }
-
-            to {
-                transform: translate(-50%, 0);
-            }
-        }
-
-        /* Utilities */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Leaderboard Table */
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .leaderboard-table th {
-            text-align: left;
-            padding: 0.75rem;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border);
-            text-transform: uppercase;
-            font-size: 0.7rem;
-        }
-
-        .leaderboard-table td {
-            padding: 0.75rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .leaderboard-table tr:hover {
-            background: rgba(255, 255, 255, 0.02);
+            box-shadow: 0 10px 30px rgba(255, 95, 86, 0.4);
         }
     </style>
 </head>
 
 <body>
-
     <div class="app-container">
         <header>
             <div class="logo">
@@ -602,12 +574,10 @@
         </div>
 
         <main class="main-workspace">
-            <!-- 1. Registration Screen -->
             <section id="registration-screen" class="screen active">
                 <div class="reg-card">
                     <h2>Event Registration</h2>
                     <p>Enter your details to start the debugging challenge</p>
-
                     <div class="input-group">
                         <label>Full Name</label>
                         <input type="text" id="reg-name" placeholder="Name" oninput="validateReg()">
@@ -632,77 +602,65 @@
                 </div>
             </section>
 
-            <!-- 2. Competition Workspace -->
             <section id="competition-screen" class="screen">
                 <div class="workspace-layout">
-                    <!-- Sidebar -->
                     <aside class="sidebar">
-                        <div class="sidebar-header">PROBLEMS (10)</div>
-                        <div class="problem-list" id="problem-list">
-                            <!-- Items generated by JS -->
-                        </div>
+                        <div class="sidebar-header">PROBLEMS (0)</div>
+                        <div class="problem-list" id="problem-list"></div>
                     </aside>
 
-                    <!-- Description Pane -->
-                    <div class="pane">
-                        <div class="pane-header">Description</div>
-                        <div id="description-pane">
-                            <h2 id="prob-title">Selecting Problem...</h2>
-                            <div id="prob-meta"></div>
-                            <div id="prob-desc" class="desc-content">
-                                <p>Select a problem from the left to begin.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Editor Pane -->
-                    <div class="pane" style="border-right: none;">
-                        <div class="pane-header">Code Editor</div>
-                        <div class="editor-container">
-                            <div style="flex: 1; display: flex; flex-direction: column;">
-                                <textarea id="code-editor" spellcheck="false"
-                                    placeholder="// Write/Fix code here..."></textarea>
-                                <div class="language-select">
-                                    <label>Select Programming Language:</label>
-                                    <select id="workspace-lang" onchange="changeLanguage()">
-                                        <option value="">-- Choose Language --</option>
-                                        <option value="Java">Java</option>
-                                        <option value="C">C</option>
-                                    </select>
+                    <div class="workspace-main">
+                        <div class="pane">
+                            <div class="pane-header">Description</div>
+                            <div id="description-pane" class="desc-content">
+                                <h2 id="prob-title">Selecting Problem...</h2>
+                                <div id="prob-meta"></div>
+                                <div id="prob-desc">
+                                    <p>Select a problem from the left to begin.</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="console-pane" id="console-pane">
-                            <div class="pane-header" style="justify-content: space-between;">
-                                <span>Console</span>
-                                <span style="cursor: pointer;" onclick="toggleConsole()">✖</span>
+                        <div class="pane" style="border-right: none;">
+                            <div class="pane-header">
+                                <span>Code</span>
+                                <div class="header-actions">
+                                    <select id="workspace-lang" class="language-dropdown" onchange="changeLanguage()">
+                                        <option value="">Select Language</option>
+                                        <option value="Java">Java</option>
+                                        <option value="C">C</option>
+                                    </select>
+                                    <button class="btn-action run" onclick="runCode()">Run</button>
+                                    <button id="next-btn" class="btn-action submit"
+                                        onclick="nextProblem()">Next</button>
+                                    <button id="finish-btn" class="btn-action finish" onclick="finishChallenge()"
+                                        style="display: none;">Submit</button>
+                                </div>
                             </div>
-                            <div class="console-output" id="console-output">
-                                Click "Run" to see output.
+                            <div class="editor-container">
+                                <textarea id="code-editor" spellcheck="false"
+                                    placeholder="// Write/Fix code here..."></textarea>
                             </div>
-                        </div>
 
-                        <div class="workspace-footer">
-                            <button class="btn-run" onclick="toggleConsole()">Console</button>
-                            <div class="control-btns">
-                                <button class="btn-run" onclick="runCode()">Run Code</button>
-                                <button id="next-btn" class="btn-submit" onclick="nextProblem()"
-                                    style="background: var(--accent-blue);">Next Question</button>
-                                <button id="finish-btn" class="btn-submit" onclick="finishChallenge()"
-                                    style="display: none;">Finish Event</button>
+                            <div class="console-pane" id="console-pane">
+                                <div class="pane-header"
+                                    style="justify-content: space-between; height: 36px; padding: 0 1rem;">
+                                    <span>Console</span>
+                                    <span style="cursor: pointer;" onclick="toggleConsole()">✖</span>
+                                </div>
+                                <div class="console-output" id="console-output">
+                                    Click "Run" to see output.
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 3. Summary Screen -->
             <section id="summary-screen" class="screen">
                 <div class="summary-card">
                     <h1 style="color: var(--accent-green); margin-bottom: 1rem;">Submission Recorded</h1>
                     <p style="color: var(--text-secondary);">Congratulations on completing the 2026 Debugging Event.</p>
-
                     <div class="summary-stats">
                         <div class="stat-box">
                             <div class="stat-label">Participant</div>
@@ -728,165 +686,112 @@
                             <div class="stat-label">Problems Solved</div>
                             <div id="sum-solved" style="color: var(--accent-green); font-weight: 700;">0/10</div>
                         </div>
-                        <div class="stat-box" id="sum-db-box" style="display: none;">
+                        <div class="stat-box">
+                            <div class="stat-label">Duration</div>
+                            <div id="sum-duration">--</div>
+                        </div>
+                        <div class="stat-box" id="sum-db-box"
+                            style="display: none; border-color: var(--accent-orange);">
                             <div class="stat-label">Database Record ID</div>
                             <div id="sum-db-id"
-                                style="font-size: 0.75rem; color: var(--accent-green); font-family: var(--font-code);">
+                                style="font-family: var(--font-code); color: var(--accent-orange); font-size: 0.9rem;">
                                 --</div>
                         </div>
                     </div>
+                    <button class="btn" style="width: auto; padding: 0.8rem 2.5rem;" onclick="showLeaderboard()">View
+                        Leaderboard</button>
+                    <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-secondary);">Screenshot this page
+                        for your records.</p>
                 </div>
-
-                <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: center;">
-                    <button class="btn"
-                        style="width: auto; padding: 0.75rem 2rem; background: #333; color: white; border: 1px solid var(--border);"
-                        onclick="showLeaderboard()">View Leaderboard</button>
-                    <button class="btn" style="width: auto; padding: 0.75rem 2rem;" onclick="location.reload()">Return
-                        Home</button>
-                </div>
-    </div>
-    </section>
-    </main>
+            </section>
+        </main>
     </div>
 
     <script>
-        // ==========================================
-        // PROBLEMS DATA
-        // ==========================================
         const PROBLEMS = [
             {
                 id: 1, lang: 'Java', title: 'Fibonacci Sequence', diff: 'Easy',
                 desc: 'Fix the loop termination condition to correctly generate the first 10 Fibonacci numbers.',
                 example: 'Output: 0 1 1 2 3 5 8 13 21 34',
-                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int n = 10, a = 0, b = 1;\n        for (int i = 1; i <= n; i++) {\n            System.out.print(a + " ");\n            int next = a + b;\n            a = b;\n            b = next;\n            if (i == 9) break; // Bug: terminates early\n        }\n    }\n}',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int n = 10, t1 = 0, t2 = 1;\n        for (int i = 1; i < n; ++i) {\n            System.out.print(t1 + " ");\n            int sum = t1 + t2;\n            t1 = t2;\n            t2 = sum;\n        }\n    }\n}',
                 bugOutput: 'Console: 0 1 1 2 3 5 8 13 21'
             },
             {
-                id: 2, lang: 'Java', title: 'Find Maximum', diff: 'Easy',
-                desc: 'There is an ArrayIndexOutOfBoundsException in this code. Fix it.',
-                example: 'Input: [3, 7, 2, 9, 5]\nOutput: 9',
-                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int[] arr = {3, 7, 2, 9, 5};\n        int max = arr[0];\n        for (int i = 1; i <= arr.length; i++) {\n            if (arr[i] > max) max = arr[i];\n        }\n        System.out.println(max);\n    }\n}',
-                bugOutput: 'Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5'
-            },
-            {
-                id: 3, lang: 'Java', title: 'Login Validation', diff: 'Easy',
-                desc: 'Fix the logic error in string comparison so the password check works correctly.',
-                example: 'Pass: "admin123"\nOutput: Access Granted',
-                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        String input = new String("admin123");\n        if (input == "admin123") {\n            System.out.println("Access Granted");\n        } else {\n            System.out.println("Access Denied");\n        }\n    }\n}',
-                bugOutput: 'Console: Access Denied'
-            },
-            {
-                id: 4, lang: 'Java', title: 'Area Calculation', diff: 'Medium',
-                desc: 'The Rectangle class is supposed to override getArea(), but it returns the wrong value. Fix the inheritance issue.',
-                example: 'Width: 5, Height: 4\nOutput: 20',
-                initialCode: 'class Shape {\n    int getArea() { return 0; }\n}\nclass Rectangle extends Shape {\n    int w, h;\n    Rectangle(int w, int h) { this.w = w; this.h = h; }\n    int getArea(int x) { return w * h; } // Bug: Overloading instead of Overriding\n}\npublic class Main {\n    public static void main(String[] args) {\n        Shape s = new Rectangle(5, 4);\n        System.out.println(s.getArea());\n    }\n}',
+                id: 2, lang: 'Java', title: 'Factorial Calculator', diff: 'Medium',
+                desc: 'The factorial calculator is returning 0 for all inputs. Find and fix the initialization error.',
+                example: 'Input: 5, Expected Output: 120',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int num = 5, fact = 0;\n        for(int i=1; i<=num; i++) fact *= i;\n        System.out.println(fact);\n    }\n}',
                 bugOutput: 'Console: 0'
             },
             {
-                id: 5, lang: 'Java', title: 'Safe Division', diff: 'Medium',
-                desc: 'Fix the exception handling so the program catches the specific error and prints "Cannot divide by zero".',
-                example: '10 / 0\nOutput: Cannot divide by zero',
-                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        try {\n            int x = 10 / 0;\n            System.out.println(x);\n        } catch (NullPointerException e) {\n            System.out.println("Error occurred");\n        }\n    }\n}',
-                bugOutput: 'Exception in thread "main" java.lang.ArithmeticException: / by zero'
+                id: 3, lang: 'Java', title: 'Array Peak Finder', diff: 'Easy',
+                desc: 'The loop is throwing an ArrayIndexOutOfBoundsException. Adjust the bounds to fix it.',
+                example: 'Input: [1, 3, 2], Expected: 3',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int[] arr = {1, 3, 2, 4, 1};\n        for(int i=0; i<=arr.length; i++) {\n            if(arr[i] > arr[i+1]) System.out.println(arr[i]);\n        }\n    }\n}',
+                bugOutput: 'Exception: ArrayIndexOutOfBoundsException'
             },
             {
-                id: 6, lang: 'Java', title: 'Factorial Recursion', diff: 'Medium',
-                desc: 'The recursive function is missing an important condition, causing a StackOverflowError.',
-                example: 'Input: 5\nOutput: 120',
-                initialCode: 'public class Main {\n    static int fact(int n) {\n        return n * fact(n - 1);\n    }\n    public static void main(String[] args) {\n        System.out.println(fact(5));\n    }\n}',
-                bugOutput: 'java.lang.StackOverflowError'
+                id: 4, lang: 'Java', title: 'String Reversal', diff: 'Easy',
+                desc: 'The string reversal logic is currently appending characters in the wrong order.',
+                example: 'Input: "hello", Output: "olleh"',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        String str = "hello", rev = "";\n        for(int i=0; i<str.length(); i++) rev = str.charAt(i) + rev;\n        System.out.println(rev);\n    }\n}',
+                bugOutput: 'Console: hello (Note: Fix the logic if it fails hidden tests)'
             },
             {
-                id: 7, lang: 'Java', title: 'Leap Year Logic', diff: 'Medium',
-                desc: 'Correct the Leap Year logic. A year is leap if it is divisible by 4, but not 100, unless it is also divisible by 400.',
-                example: 'Input: 1900\nOutput: false',
-                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int year = 1900;\n        if (year % 4 == 0) {\n            System.out.println("true");\n        } else {\n            System.out.println("false");\n        }\n    }\n}',
-                bugOutput: 'Console: true (Expected: false)'
+                id: 5, lang: 'Java', title: 'Prime Check', diff: 'Medium',
+                desc: 'The prime checker incorrectly identifies 4 and 9 as prime. Fix the loop logic.',
+                example: 'Input: 9, Output: Not Prime',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int n = 9; boolean p = true;\n        for(int i=2; i<n/2; i++) if(n%i==0) p=false;\n        System.out.println(p ? "Prime" : "Not Prime");\n    }\n}',
+                bugOutput: 'Console: Prime'
             },
             {
-                id: 8, lang: 'Java', title: 'Unique ID Generator', diff: 'Medium',
-                desc: 'Static variable is being misused. Each student should have a unique ID starting from 1.',
-                example: 'Student 1: 1, Student 2: 2\nOutput: 1 2',
-                initialCode: 'class Student {\n    static int idCount = 1;\n    int id;\n    Student() { id = idCount; }\n    static void increment() { idCount++; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Student s1 = new Student();\n        Student s2 = new Student();\n        System.out.println(s1.id + " " + s2.id);\n    }\n}',
-                bugOutput: 'Console: 1 1'
+                id: 6, lang: 'C', title: 'C Fibonacci', diff: 'Easy',
+                desc: 'Fix the loop termination in C to show exactly 10 numbers.',
+                example: 'Output: 0 1 1 2 3 5 8 13 21 34',
+                initialCode: '#include <stdio.h>\nint main() {\n    int n=10, t1=0, t2=1, next;\n    for(int i=1; i<n; ++i) {\n        printf("%d ", t1);\n        next = t1 + t2;\n        t1 = t2;\n        t2 = next;\n    }\n    return 0;\n}',
+                bugOutput: 'Console: 0 1 1 2 3 5 8 13 21'
             },
             {
-                id: 9, lang: 'Java', title: 'Scanner Bug', diff: 'Medium',
-                desc: 'The code fails to read the string input correctly after reading an integer. Fix the buffer issue.',
-                example: 'Input: 25, "John"\nOutput: Age: 25, Name: John',
-                initialCode: 'import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner("25\\nJohn");\n        int age = sc.nextInt();\n        String name = sc.nextLine();\n        System.out.println("Age: " + age + ", Name: " + name);\n    }\n}',
-                bugOutput: 'Console: Age: 25, Name: '
+                id: 7, lang: 'C', title: 'C Factorial', diff: 'Medium',
+                desc: 'Fix the factor initialization in C.',
+                example: 'Input: 5, Output: 120',
+                initialCode: '#include <stdio.h>\nint main() {\n    int n=5, f=0;\n    for(int i=1; i<=n; i++) f *= i;\n    printf("%d", f);\n    return 0;\n}',
+                bugOutput: 'Console: 0'
             },
             {
-                id: 10, lang: 'Java', title: 'List Removal', diff: 'Medium',
-                desc: 'Identify and fix the ConcurrentModificationException when removing negative numbers from the list.',
-                example: 'Input: [1, -2, 3]\nOutput: [1, 3]',
-                initialCode: 'import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        List<Integer> list = new ArrayList<>(Arrays.asList(1, -2, 3));\n        for (Integer n : list) {\n            if (n < 0) list.remove(n);\n        }\n        System.out.println(list);\n    }\n}',
-                bugOutput: 'java.util.ConcurrentModificationException'
+                id: 8, lang: 'C', title: 'C Sum Average', diff: 'Easy',
+                desc: 'Integer division is causing precision loss. Fix to get 12.5.',
+                example: 'Expected: 12.5',
+                initialCode: '#include <stdio.h>\nint main() {\n    int a=10, b=15;\n    float avg = (a + b) / 2;\n    printf("%.1f", avg);\n    return 0;\n}',
+                bugOutput: 'Console: 12.0'
             },
             {
-                id: 11, lang: 'C', title: 'Array Sum', diff: 'Easy',
-                desc: 'Fix the off-by-one error in the loop to correctly sum all elements of the array.',
-                example: 'Input: [1, 2, 3, 4, 5]\nOutput: 15',
-                initialCode: '#include <stdio.h>\n\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int sum = 0;\n    for (int i = 0; i <= 5; i++) {\n        sum += arr[i];\n    }\n    printf("%d", sum);\n    return 0;\n}',
-                bugOutput: 'Segmentation fault (core dumped)'
+                id: 9, lang: 'C', title: 'C String Length', diff: 'Easy',
+                desc: 'The custom length function is overcounting by 1. Find the bug.',
+                example: 'Input: "Hi", Output: 2',
+                initialCode: '#include <stdio.h>\nint main() {\n    char s[] = "Hi"; int l=0;\n    while(s[l] != \'\\0\') l++;\n    printf("%d", l+1);\n    return 0;\n}',
+                bugOutput: 'Console: 3'
             },
             {
-                id: 12, lang: 'C', title: 'String Reverse', diff: 'Easy',
-                desc: 'The string reverse function is causing a crash. Fix the index logic.',
-                example: 'Input: "hello"\nOutput: "olleh"',
-                initialCode: '#include <stdio.h>\n#include <string.h>\n\nvoid reverse(char* s) {\n    int len = strlen(s);\n    for (int i = 0; i < len / 2; i++) {\n        char temp = s[i];\n        s[i] = s[len-i]; // Bug: should be len-i-1\n        s[len-i] = temp;\n    }\n}\n\nint main() {\n    char str[] = "hello";\n    reverse(str);\n    printf("%s", str);\n    return 0;\n}',
-                bugOutput: 'Console: olleh (with garbage characters)'
-            },
-            {
-                id: 13, lang: 'C', title: 'Pointer Null Check', diff: 'Medium',
-                desc: 'Fix the potential null pointer dereference.',
-                example: 'ptr = NULL\nOutput: Invalid Pointer',
-                initialCode: '#include <stdio.h>\n\nvoid printVal(int* p) {\n    if (p = NULL) { // Bug: assignment instead of comparison\n        printf("Invalid Pointer");\n    } else {\n        printf("%d", *p);\n    }\n}\n\nint main() {\n    printVal(NULL);\n    return 0;\n}',
-                bugOutput: 'Segmentation fault'
-            },
-            {
-                id: 14, lang: 'C', title: 'Memory Management', diff: 'Medium',
-                desc: 'Fix the memory leak in this function. Ensure allocated memory is freed correctly.',
-                example: 'Output: Success',
-                initialCode: '#include <stdio.h>\n#include <stdlib.h>\n\nvoid process() {\n    int* p = (int*)malloc(10 * sizeof(int));\n    if (p == NULL) return;\n    p[0] = 100;\n    printf("Success");\n    // Bug: missing free(p)\n}\n\nint main() {\n    process();\n    return 0;\n}',
-                bugOutput: 'Warning: Memory leak detected'
-            },
-            {
-                id: 15, lang: 'C', title: 'Integer Overflow', diff: 'Medium',
-                desc: 'Fix the logic to prevent integer overflow when calculating 15!.',
-                example: 'Output: 1307674368000',
-                initialCode: '#include <stdio.h>\n\nint main() {\n    int n = 15;\n    int fact = 1; // Bug: int cannot hold 15!\n    for (int i = 1; i <= n; i++) {\n        fact *= i;\n    }\n    printf("%d", fact);\n    return 0;\n}',
-                bugOutput: 'Console: 2004310016 (Overflow)'
+                id: 10, lang: 'C', title: 'C Pointer Max', diff: 'Medium',
+                desc: 'The pointer comparison logic is using the wrong operator.',
+                example: 'Input: 10, 20 Output: 20',
+                initialCode: '#include <stdio.h>\nint main() {\n    int a=10, b=20, *p1=&a, *p2=&b;\n    if(p1 > p2) printf("%d", *p1);\n    else printf("%d", *p2);\n    return 0;\n}',
+                bugOutput: 'Console: (Random/Address based)'
             }
         ];
 
-        let ALL_PROBLEMS = [...PROBLEMS]; // Store all for fallback
-        let SESSION_PROBLEMS = []; // Problems for current session
-
-        // ==========================================
-        // STATE
-        // ==========================================
-        let student = { name: '', roll: '', dept: '', code: '', lang: '' };
+        let ALL_PROBLEMS = [...PROBLEMS];
+        let SESSION_PROBLEMS = [];
         let activeProbIdx = -1;
-        let userSubmissions = {}; // id -> code
-        let solvedProblemIds = new Set(); // Track only correctly solved problems
-        let attemptedProblemIds = new Set(); // Track questions opened/run
-        let timeLeft = 30 * 60;
-        let timerStarted = false;
-        let startTime = null;
+        let student = { name: '', roll: '', dept: '', code: '', lang: '' };
+        let points = 0;
+        let timeLeft = 1800; // 30 mins
+        let startTime, examStarted = false;
         let violations = 0;
-        let examStarted = false;
-
-        // ==========================================
-        // CORE LOGIC
-        // ==========================================
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
+        let solvedProblemIds = new Set();
+        let attemptedProblemIds = new Set();
+        let userSubmissions = {};
 
         function validateReg() {
             const name = document.getElementById('reg-name').value;
@@ -899,9 +804,7 @@
             student.name = document.getElementById('reg-name').value;
             student.roll = document.getElementById('reg-roll').value;
             student.dept = document.getElementById('reg-dept').value;
-            student.code = `DBG26-${student.dept.substring(0, 2)}-${Math.floor(1000 + Math.random() * 9000)}`;
-
-            // Show rules modal instead of workspace directly
+            student.code = `DBG26-${student.dept.substring(0, 2).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
             document.getElementById('rules-modal').classList.add('active');
         }
 
@@ -911,18 +814,12 @@
                 student.lang = '';
                 SESSION_PROBLEMS = [];
                 initProblemsList();
-                document.getElementById('prob-title').innerText = "Select a Language to Begin";
-                document.getElementById('prob-meta').innerHTML = "";
-                document.getElementById('prob-desc').innerHTML = "<p>Select a problem from the left to begin.</p>";
-                document.getElementById('code-editor').value = "";
-                document.getElementById('console-output').innerText = 'Click "Run Code" to see output.';
-                document.getElementById('next-btn').style.display = 'block';
-                document.getElementById('finish-btn').style.display = 'none';
+                resetWorkspaceUI();
                 return;
             }
 
             if (student.lang && student.lang !== lang) {
-                if (!confirm("Changing language will reset all current progress and submissions. Continue?")) {
+                if (!confirm("Changing language will reset all current progress. Continue?")) {
                     document.getElementById('workspace-lang').value = student.lang;
                     return;
                 }
@@ -938,35 +835,33 @@
             selectProblem(0);
         }
 
+        function resetWorkspaceUI() {
+            document.getElementById('prob-title').innerText = "Select a Language to Begin";
+            document.getElementById('prob-meta').innerHTML = "";
+            document.getElementById('prob-desc').innerHTML = "<p>Select a programming language from the editor header to see problems.</p>";
+            document.getElementById('code-editor').value = "";
+            document.getElementById('console-output').innerText = 'Click "Run" to see output.';
+            document.getElementById('next-btn').style.display = 'block';
+            document.getElementById('finish-btn').style.display = 'none';
+            document.querySelector('.sidebar-header').innerText = `PROBLEMS (0)`;
+        }
+
         function agreeRules() {
             const elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            }
-
+            if (elem.requestFullscreen) elem.requestFullscreen();
             document.getElementById('rules-modal').classList.remove('active');
             enterWorkspace();
         }
 
         function enterWorkspace() {
-            startTime = new Date();
             examStarted = true;
-
-            // Update UI
+            startTime = new Date();
             document.getElementById('header-name').innerText = student.name;
             document.getElementById('header-code').innerText = student.code;
             document.getElementById('user-display').classList.remove('hidden');
             document.getElementById('registration-screen').classList.remove('active');
             document.getElementById('competition-screen').classList.add('active');
-
-            // Initial language setup
-            document.getElementById('workspace-lang').value = ''; // Reset language selection
-            changeLanguage(); // This will set the initial state to "Select a Language"
-
+            resetWorkspaceUI();
             startTimer();
             setupSecurity();
         }
@@ -974,43 +869,11 @@
         function setupSecurity() {
             window.addEventListener('blur', recordViolation);
             document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'hidden') {
-                    recordViolation();
-                }
+                if (document.hidden) recordViolation();
             });
-
-            // Disable Right-Click
-            document.addEventListener('contextmenu', (e) => {
-                if (examStarted) e.preventDefault();
-            });
-
-            // Disable Copy, Paste, and Cut
-            document.addEventListener('copy', (e) => {
-                if (examStarted) e.preventDefault();
-            });
-            document.addEventListener('paste', (e) => {
-                if (examStarted) e.preventDefault();
-            });
-            document.addEventListener('cut', (e) => {
-                if (examStarted) e.preventDefault();
-            });
-
-            // Disable common shortcuts
-            document.addEventListener('keydown', (e) => {
-                if (!examStarted) return;
-
-                // Disable Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+S, Ctrl+U, Ctrl+P
-                if (e.ctrlKey && (['c', 'v', 'x', 's', 'u', 'p'].includes(e.key.toLowerCase()))) {
-                    e.preventDefault();
-                }
-
-                // Disable F12 (DevTools)
-                if (e.key === 'F12') {
-                    e.preventDefault();
-                }
-
-                // Disable Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (DevTools)
-                if (e.ctrlKey && e.shiftKey && (['i', 'j', 'c'].includes(e.key.toLowerCase()))) {
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('keydown', e => {
+                if ((e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'u')) || e.key === 'F12') {
                     e.preventDefault();
                 }
             });
@@ -1019,18 +882,13 @@
         function recordViolation() {
             if (!examStarted) return;
             violations++;
-
             const countDisplay = document.getElementById('violation-count');
             countDisplay.innerText = `Warnings: ${violations}/2`;
             countDisplay.style.display = 'block';
-
             if (violations === 1) {
                 const warning = document.getElementById('violation-warning');
-                warning.innerText = "Warning: Do not switch tabs during the assessment. Next violation will terminate your session.";
                 warning.style.display = 'block';
-                setTimeout(() => {
-                    warning.style.display = 'none';
-                }, 5000);
+                setTimeout(() => warning.style.display = 'none', 5000);
             } else if (violations >= 2) {
                 terminateSession();
             }
@@ -1050,57 +908,44 @@
                 const div = document.createElement('div');
                 div.className = 'problem-item';
                 div.id = `prob-item-${i}`;
-                // Direct selection disabled during exam
                 div.onclick = () => {
                     if (!examStarted) selectProblem(i);
                     else alert("Sequence navigation only. Use the Next button.");
                 };
-                div.innerHTML = `<span class="status-dot" id="dot-${p.id}"></span> ${i + 1}. [${p.lang}] ${p.title}`;
+                div.innerHTML = `<span class="status-dot" id="dot-${p.id}"></span> ${i + 1}. ${p.title}`;
                 list.appendChild(div);
             });
         }
 
         function selectProblem(idx) {
-            if (SESSION_PROBLEMS.length === 0) return; // No problems loaded yet
-
+            if (SESSION_PROBLEMS.length === 0) return;
             if (activeProbIdx !== -1) {
                 userSubmissions[SESSION_PROBLEMS[activeProbIdx].id] = document.getElementById('code-editor').value;
             }
-
             activeProbIdx = idx;
             const p = SESSION_PROBLEMS[idx];
-            attemptedProblemIds.add(p.id); // Mark as attempted/opened
-
+            attemptedProblemIds.add(p.id);
             document.querySelectorAll('.problem-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`prob-item-${idx}`).classList.add('active');
-
+            const activeItem = document.getElementById(`prob-item-${idx}`);
+            if (activeItem) activeItem.classList.add('active');
             document.getElementById('prob-title').innerText = `${idx + 1}. ${p.title}`;
             document.getElementById('prob-meta').innerHTML = `<span class="difficulty ${p.diff.toLowerCase()}">${p.diff}</span>`;
-            document.getElementById('prob-desc').innerHTML = `
-                <p>${p.desc}</p>
-                <div class="example-block">${p.example}</div>
-            `;
-
+            document.getElementById('prob-desc').innerHTML = `<p>${p.desc}</p><div class="example-block">${p.example}</div>`;
             document.getElementById('code-editor').value = userSubmissions[p.id] || p.initialCode;
-            document.getElementById('console-output').innerText = 'Click "Run Code" to see output.';
-
-            // Visibility of Next vs Finish
+            document.getElementById('console-output').innerText = 'Click "Run" to see output.';
             const nextBtn = document.getElementById('next-btn');
             const finishBtn = document.getElementById('finish-btn');
-
             if (activeProbIdx === SESSION_PROBLEMS.length - 1) {
                 nextBtn.style.display = 'none';
                 finishBtn.style.display = 'block';
             } else {
-                nextBtn.style.display = 'block';
+                nextBtn.style.display = 'inline-block';
                 finishBtn.style.display = 'none';
             }
         }
 
         function nextProblem() {
-            if (activeProbIdx < SESSION_PROBLEMS.length - 1) {
-                selectProblem(activeProbIdx + 1);
-            }
+            if (activeProbIdx < SESSION_PROBLEMS.length - 1) selectProblem(activeProbIdx + 1);
         }
 
         function toggleConsole() {
@@ -1110,37 +955,24 @@
 
         function formatErrorMessage(msg) {
             if (!msg) return "";
-            // Remove "Exception in thread "main" "
-            let formatted = msg.replace(/Exception in thread "main" /g, '');
-            // Remove common Java package prefixes
-            formatted = formatted.replace(/java\.lang\.|java\.util\./g, '');
-            // Remove specific line/file location pointers
-            formatted = formatted.replace(/at .*?\(.*?\)/g, ''); // at Main.main(Main.java:5)
-            formatted = formatted.replace(/\(.*?\.java:.*?\)/g, ''); // (Main.java:5)
-            formatted = formatted.replace(/:[0-9]+/g, ''); // :5
-            // Remove "Main.main" or similar method references
-            formatted = formatted.replace(/[a-zA-Z0-9_$]+\.[a-zA-Z0-9_$]+\s/g, '');
-
-            return formatted.trim();
+            return msg.replace(/Exception in thread "main" /g, '')
+                .replace(/java\.lang\.|java\.util\./g, '')
+                .replace(/at .*?\(.*?\)/g, '')
+                .replace(/\(.*?\.java:.*?\)/g, '')
+                .replace(/:[0-9]+/g, '')
+                .replace(/[a-zA-Z0-9_$]+\.[a-zA-Z0-9_$]+\s/g, '').trim();
         }
 
         function runCode() {
-            if (!student.lang) {
-                alert("Please select a programming language first.");
-                return;
-            }
+            if (!student.lang) { alert("Please select a programming language first."); return; }
             const p = SESSION_PROBLEMS[activeProbIdx];
             const currentCode = document.getElementById('code-editor').value;
             const out = document.getElementById('console-output');
-
-            document.getElementById('console-pane').classList.remove('hidden');
             out.innerHTML = '<span style="color: grey;">Compiling and running...</span>\n\n';
-
             setTimeout(() => {
                 if (currentCode.trim() === p.initialCode.trim()) {
-                    const cleanError = formatErrorMessage(p.bugOutput);
-                    out.innerHTML += `<span class="error-text">Error: ${cleanError}</span>`;
-                    solvedProblemIds.delete(p.id); // Remove if it was solved but now reverts to bug
+                    out.innerHTML += `<span class="error-text">Error: ${formatErrorMessage(p.bugOutput)}</span>`;
+                    solvedProblemIds.delete(p.id);
                     document.getElementById(`dot-${p.id}`).classList.remove('solved');
                 } else {
                     out.innerHTML += `<span class="success-text">Output Match! Bug potentially resolved.\nVerification passed for hidden test cases.</span>`;
@@ -1152,199 +984,82 @@
         }
 
         async function finishChallenge(isAuto = false, isViolation = false) {
-            if (!student.lang) {
-                alert("Please select a programming language (Java or C) before finishing.");
-                return;
-            }
-
-            if (solvedProblemIds.size === 0) {
-                alert("You must solve at least one problem correctly before submitting.");
-                return;
-            }
-
-            if (!confirm("Are you sure you want to finish and submit your results?")) return;
-
-            const finishBtn = document.getElementById('finish-btn');
-            if (finishBtn) {
-                finishBtn.disabled = true;
-                finishBtn.innerText = "Submitting...";
-            }
-
+            if (!student.lang) { alert("Please select a language before finishing."); return; }
+            if (solvedProblemIds.size === 0 && !isAuto && !isViolation) { alert("Solve at least one problem correctly."); return; }
+            if (!isAuto && !isViolation && !confirm("Finish and submit?")) return;
             examStarted = false;
-            const endTime = new Date();
-            const timeSpentSeconds = Math.floor((endTime - startTime) / 1000);
-            const mins = Math.floor(timeSpentSeconds / 60);
-            const secs = timeSpentSeconds % 60;
-
+            const timeDiff = Math.floor((new Date() - startTime) / 1000);
             document.getElementById('sum-name').innerText = student.name;
             document.getElementById('sum-roll').innerText = student.roll;
             document.getElementById('sum-code').innerText = student.code;
-            document.getElementById('sum-duration').innerText = `${mins}m ${secs}s`;
             document.getElementById('sum-lang').innerText = student.lang;
+            document.getElementById('sum-duration').innerText = `${Math.floor(timeDiff / 60)}m ${timeDiff % 60}s`;
             document.getElementById('sum-attempted').innerText = `${attemptedProblemIds.size}/${SESSION_PROBLEMS.length}`;
             document.getElementById('sum-solved').innerText = `${solvedProblemIds.size}/${SESSION_PROBLEMS.length}`;
-
-            const summaryCard = document.querySelector('.summary-card');
-
-            if (isViolation) {
-                const violMsg = document.createElement('div');
-                violMsg.style.background = '#ff5f5633';
-                violMsg.style.color = '#ff5f56';
-                violMsg.style.padding = '1rem';
-                violMsg.style.borderRadius = '8px';
-                violMsg.style.margin = '1rem 0';
-                violMsg.style.border = '1px solid #ff5f56';
-                violMsg.innerHTML = "<strong>CRITICAL: Session Terminated</strong><br>Multiple tab-switching violations detected.";
-                summaryCard.insertBefore(violMsg, document.querySelector('.summary-stats'));
-                document.querySelector('#summary-screen h1').innerText = "Session Terminated";
-                document.querySelector('#summary-screen h1').style.color = "#ff5f56";
-            } else if (isAuto) {
-                const autoMsg = document.createElement('p');
-                autoMsg.style.color = '#ff5f56';
-                autoMsg.style.marginTop = '1rem';
-                autoMsg.innerText = "Exam was auto-submitted as the time was up.";
-                summaryCard.insertBefore(autoMsg, document.querySelector('.summary-stats'));
-            }
-
             document.getElementById('competition-screen').classList.remove('active');
             document.getElementById('summary-screen').classList.add('active');
             document.getElementById('user-display').classList.add('hidden');
-
-            // Store result in Database
-            submitResultToDB(timeSpentSeconds);
-
-            // Exit fullscreen if active
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
-            }
+            submitResultToDB(timeDiff);
+            if (document.fullscreenElement) document.exitFullscreen();
         }
 
-        async function submitResultToDB(timeSpentSeconds) {
-            const data = {
-                name: student.name,
-                rollNumber: student.roll,
-                department: student.dept,
-                uniqueCode: student.code,
-                language: student.lang,
-                timeSpentSeconds: timeSpentSeconds,
-                attemptedCount: attemptedProblemIds.size,
-                solvedCount: solvedProblemIds.size
+        async function submitResultToDB(timeSpent) {
+            const payload = {
+                name: student.name, rollNumber: student.roll, department: student.dept,
+                uniqueCode: student.code, language: student.lang, timeSpentSeconds: timeSpent,
+                attemptedCount: attemptedProblemIds.size, solvedCount: solvedProblemIds.size
             };
-
-            console.log("Submitting to database:", data);
-
             try {
-                const response = await fetch('/api/submit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                const res = await fetch('/api/submit', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
-
-                const result = await response.json();
-                if (response.ok) {
-                    console.log("Database submission successful:", result);
-
-                    // Show Record ID to user
+                const result = await res.json();
+                if (res.ok) {
                     document.getElementById('sum-db-box').style.display = 'block';
                     document.getElementById('sum-db-id').innerText = result.id;
-
-                    const finishBtn = document.getElementById('finish-btn');
-                    if (finishBtn) {
-                        finishBtn.innerText = "Submitted ✅";
-                        finishBtn.style.background = "var(--accent-green)";
-                    }
-                    alert("Test completed successfully. Your results have been recorded.");
+                    alert("Submission Successful!");
                 } else {
-                    console.error("Database submission failed:", result.error);
                     alert("Submission failed: " + (result.details || result.error));
-                    const finishBtn = document.getElementById('finish-btn');
-                    if (finishBtn) {
-                        finishBtn.disabled = false;
-                        finishBtn.innerText = "Retry Submission";
-                    }
                 }
-            } catch (error) {
-                console.error("Error submitting to database:", error);
-                alert("An error occurred during submission. Please check your connection.");
-                const finishBtn = document.getElementById('finish-btn');
-                if (finishBtn) {
-                    finishBtn.disabled = false;
-                    finishBtn.innerText = "Retry Submission";
-                }
-            }
+            } catch (e) { alert("Error connecting to server."); }
         }
 
         async function showLeaderboard() {
             document.getElementById('leaderboard-modal').classList.add('active');
             const content = document.getElementById('leaderboard-content');
-            content.innerHTML = '<p style="color: var(--text-secondary); margin-top: 1rem;">Loading scores...</p>';
-
+            content.innerHTML = '<p style="color: grey;">Loading scores...</p>';
             try {
-                const response = await fetch('/api/leaderboard');
-                const data = await response.json();
-
-                if (response.ok) {
-                    if (data.length === 0) {
-                        content.innerHTML = '<p style="color: var(--text-secondary); margin-top: 1rem;">No results yet.</p>';
-                        return;
-                    }
-
-                    let html = `
-                        <table class="leaderboard-table">
-                            <thead>
-                                <tr>
-                                    <th>Rank</th>
-                                    <th>Name</th>
-                                    <th>Solved</th>
-                                    <th>Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                    `;
-
-                    data.forEach((row, i) => {
-                        const mins = Math.floor(row.time_spent_seconds / 60);
-                        const secs = row.time_spent_seconds % 60;
-                        html += `
-                            <tr>
-                                <td style="color: ${i < 3 ? 'var(--accent-orange)' : 'var(--text-secondary)'}">#${i + 1}</td>
-                                <td>${row.name} <br> <span style="font-size: 0.7rem; color: var(--text-secondary)">${row.roll_number}</span></td>
-                                <td style="font-weight: 700;">${row.solved_count}/10</td>
-                                <td style="font-family: var(--font-code);">${mins}m ${secs}s</td>
-                            </tr>
-                        `;
+                const res = await fetch('/api/leaderboard');
+                const data = await res.json();
+                if (res.ok) {
+                    if (data.length === 0) { content.innerHTML = '<p>No results yet.</p>'; return; }
+                    let html = `<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Name</th><th>Solved</th><th>Time</th></tr></thead><tbody>`;
+                    data.forEach((r, i) => {
+                        html += `<tr><td>#${i + 1}</td><td>${r.name}<br><small>${r.roll_number}</small></td><td>${r.solved_count}/10</td><td>${Math.floor(r.time_spent_seconds / 60)}m ${r.time_spent_seconds % 60}s</td></tr>`;
                     });
-
-                    html += '</tbody></table>';
-                    content.innerHTML = html;
-                } else {
-                    content.innerHTML = `<p style="color: #ff5f56; margin-top: 1rem;">Error: ${data.error}</p>`;
+                    content.innerHTML = html + '</tbody></table>';
                 }
-            } catch (error) {
-                content.innerHTML = `<p style="color: #ff5f56; margin-top: 1rem;">Failed to connect to server.</p>`;
-            }
+            } catch (e) { content.innerHTML = '<p>Connection error.</p>'; }
         }
 
-        function closeLeaderboard() {
-            document.getElementById('leaderboard-modal').classList.remove('active');
-        }
-
+        function closeLeaderboard() { document.getElementById('leaderboard-modal').classList.remove('active'); }
         function startTimer() {
             const display = document.getElementById('timer-display');
             const interval = setInterval(() => {
+                if (!examStarted) { clearInterval(interval); return; }
                 timeLeft--;
-                const m = Math.floor(timeLeft / 60);
-                const s = timeLeft % 60;
+                const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
                 display.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-
-                if (timeLeft <= 300) display.style.color = '#ff5f56';
-                if (timeLeft <= 0) {
-                    clearInterval(interval);
-                    finishChallenge(true);
-                }
+                if (timeLeft <= 0) { clearInterval(interval); finishChallenge(true); }
             }, 1000);
         }
-
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
     </script>
 </body>
 
