@@ -24,6 +24,10 @@ export default async function handler(req, res) {
 
     const { name, rollNumber, department, uniqueCode, timeSpentSeconds, solvedCount } = req.body;
 
+    if (!process.env.MONGODB_URI) {
+        return res.status(500).json({ error: 'Internal Server Error', details: 'MONGODB_URI is not defined in environment variables.' });
+    }
+
     if (!name || !rollNumber || !uniqueCode) {
         return res.status(400).json({ error: 'Missing required fields' });
     }

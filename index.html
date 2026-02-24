@@ -1090,7 +1090,7 @@
                     alert("Test completed successfully. Your results have been recorded.");
                 } else {
                     console.error("Database submission failed:", result.error);
-                    alert("Submission failed: " + result.error);
+                    alert("Submission failed: " + (result.details || result.error));
                     const finishBtn = document.getElementById('finish-btn');
                     if (finishBtn) {
                         finishBtn.disabled = false;
