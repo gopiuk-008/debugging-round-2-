@@ -308,11 +308,42 @@
         /* Console Pane */
         .console-pane {
             height: 180px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-pane);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .language-select {
+            padding: 10px;
             background: var(--bg-pane);
             border-top: 1px solid var(--border);
             display: flex;
-            flex-direction: column;
-            transition: height 0.3s;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .language-select label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #aaa;
+        }
+
+        .language-select select {
+            background: #333;
+            color: white;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .language-select select:focus {
+            border-color: var(--accent-orange);
         }
 
         .console-output {
@@ -597,14 +628,6 @@
                             <option value="B.Sc (Physics)">B.Sc (Physics)</option>
                         </select>
                     </div>
-                    <div class="input-group">
-                        <label>Programming Language</label>
-                        <select id="reg-lang" onchange="validateReg()">
-                            <option value="">Select Language</option>
-                            <option value="Java">Java</option>
-                            <option value="C">C</option>
-                        </select>
-                    </div>
                     <button id="start-btn" class="btn" disabled onclick="startChallenge()">Enter Workspace</button>
                 </div>
             </section>
@@ -636,8 +659,18 @@
                     <div class="pane" style="border-right: none;">
                         <div class="pane-header">Code Editor</div>
                         <div class="editor-container">
-                            <textarea id="code-editor" spellcheck="false"
-                                placeholder="// Write/Fix code here..."></textarea>
+                            <div style="flex: 1; display: flex; flex-direction: column;">
+                                <textarea id="code-editor" spellcheck="false"
+                                    placeholder="// Write/Fix code here..."></textarea>
+                                <div class="language-select">
+                                    <label>Select Programming Language:</label>
+                                    <select id="workspace-lang" onchange="changeLanguage()">
+                                        <option value="">-- Choose Language --</option>
+                                        <option value="Java">Java</option>
+                                        <option value="C">C</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="console-pane" id="console-pane">
@@ -656,7 +689,7 @@
                                 <button class="btn-run" onclick="runCode()">Run Code</button>
                                 <button id="next-btn" class="btn-submit" onclick="nextProblem()"
                                     style="background: var(--accent-blue);">Next Question</button>
-                                <button id="finish-btn" class="btn-submit" onclick="submitExam()"
+                                <button id="finish-btn" class="btn-submit" onclick="finishChallenge()"
                                     style="display: none;">Finish Event</button>
                             </div>
                         </div>
@@ -674,6 +707,10 @@
                         <div class="stat-box">
                             <div class="stat-label">Participant</div>
                             <div id="sum-name" style="font-weight: 600;">--</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Roll Number</div>
+                            <div id="sum-roll" style="font-weight: 600; color: var(--accent-orange);">--</div>
                         </div>
                         <div class="stat-box">
                             <div class="stat-label">Unique ID</div>
@@ -855,27 +892,50 @@
             const name = document.getElementById('reg-name').value;
             const roll = document.getElementById('reg-roll').value;
             const dept = document.getElementById('reg-dept').value;
-            const lang = document.getElementById('reg-lang').value;
-            document.getElementById('start-btn').disabled = !(name && roll && dept && lang);
+            document.getElementById('start-btn').disabled = !(name && roll && dept);
         }
 
         function startChallenge() {
             student.name = document.getElementById('reg-name').value;
             student.roll = document.getElementById('reg-roll').value;
             student.dept = document.getElementById('reg-dept').value;
-            student.lang = document.getElementById('reg-lang').value;
             student.code = `DBG26-${student.dept.substring(0, 2)}-${Math.floor(1000 + Math.random() * 9000)}`;
-
-            // Filter problems by selection
-            SESSION_PROBLEMS = ALL_PROBLEMS.filter(p => p.lang === student.lang);
-            if (SESSION_PROBLEMS.length === 0) {
-                alert("No problems available for " + student.lang + ". Fallback to Java.");
-                SESSION_PROBLEMS = ALL_PROBLEMS.filter(p => p.lang === 'Java');
-            }
-            shuffleArray(SESSION_PROBLEMS);
 
             // Show rules modal instead of workspace directly
             document.getElementById('rules-modal').classList.add('active');
+        }
+
+        function changeLanguage() {
+            const lang = document.getElementById('workspace-lang').value;
+            if (!lang) {
+                student.lang = '';
+                SESSION_PROBLEMS = [];
+                initProblemsList();
+                document.getElementById('prob-title').innerText = "Select a Language to Begin";
+                document.getElementById('prob-meta').innerHTML = "";
+                document.getElementById('prob-desc').innerHTML = "<p>Select a problem from the left to begin.</p>";
+                document.getElementById('code-editor').value = "";
+                document.getElementById('console-output').innerText = 'Click "Run Code" to see output.';
+                document.getElementById('next-btn').style.display = 'block';
+                document.getElementById('finish-btn').style.display = 'none';
+                return;
+            }
+
+            if (student.lang && student.lang !== lang) {
+                if (!confirm("Changing language will reset all current progress and submissions. Continue?")) {
+                    document.getElementById('workspace-lang').value = student.lang;
+                    return;
+                }
+                userSubmissions = {};
+                solvedProblemIds = new Set();
+                attemptedProblemIds = new Set();
+            }
+
+            student.lang = lang;
+            SESSION_PROBLEMS = ALL_PROBLEMS.filter(p => p.lang === student.lang);
+            shuffleArray(SESSION_PROBLEMS);
+            initProblemsList();
+            selectProblem(0);
         }
 
         function agreeRules() {
@@ -903,9 +963,11 @@
             document.getElementById('registration-screen').classList.remove('active');
             document.getElementById('competition-screen').classList.add('active');
 
-            initProblemsList();
+            // Initial language setup
+            document.getElementById('workspace-lang').value = ''; // Reset language selection
+            changeLanguage(); // This will set the initial state to "Select a Language"
+
             startTimer();
-            selectProblem(0);
             setupSecurity();
         }
 
@@ -977,12 +1039,13 @@
         function terminateSession() {
             examStarted = false;
             alert("Session terminated due to multiple tab switching violations.");
-            submitExam(true, true);
+            finishChallenge(true, true);
         }
 
         function initProblemsList() {
             const list = document.getElementById('problem-list');
             list.innerHTML = '';
+            document.querySelector('.sidebar-header').innerText = `PROBLEMS (${SESSION_PROBLEMS.length})`;
             SESSION_PROBLEMS.forEach((p, i) => {
                 const div = document.createElement('div');
                 div.className = 'problem-item';
@@ -998,6 +1061,8 @@
         }
 
         function selectProblem(idx) {
+            if (SESSION_PROBLEMS.length === 0) return; // No problems loaded yet
+
             if (activeProbIdx !== -1) {
                 userSubmissions[SESSION_PROBLEMS[activeProbIdx].id] = document.getElementById('code-editor').value;
             }
@@ -1060,6 +1125,10 @@
         }
 
         function runCode() {
+            if (!student.lang) {
+                alert("Please select a programming language first.");
+                return;
+            }
             const p = SESSION_PROBLEMS[activeProbIdx];
             const currentCode = document.getElementById('code-editor').value;
             const out = document.getElementById('console-output');
@@ -1082,8 +1151,18 @@
             }, 800);
         }
 
-        function submitExam(isAuto = false, isViolation = false) {
-            if (!isAuto && !confirm("Are you sure you want to finish the event?")) return;
+        async function finishChallenge(isAuto = false, isViolation = false) {
+            if (!student.lang) {
+                alert("Please select a programming language (Java or C) before finishing.");
+                return;
+            }
+
+            if (solvedProblemIds.size === 0) {
+                alert("You must solve at least one problem correctly before submitting.");
+                return;
+            }
+
+            if (!confirm("Are you sure you want to finish and submit your results?")) return;
 
             const finishBtn = document.getElementById('finish-btn');
             if (finishBtn) {
@@ -1093,11 +1172,12 @@
 
             examStarted = false;
             const endTime = new Date();
-            const diff = Math.floor((endTime - startTime) / 1000);
-            const mins = Math.floor(diff / 60);
-            const secs = diff % 60;
+            const timeSpentSeconds = Math.floor((endTime - startTime) / 1000);
+            const mins = Math.floor(timeSpentSeconds / 60);
+            const secs = timeSpentSeconds % 60;
 
             document.getElementById('sum-name').innerText = student.name;
+            document.getElementById('sum-roll').innerText = student.roll;
             document.getElementById('sum-code').innerText = student.code;
             document.getElementById('sum-duration').innerText = `${mins}m ${secs}s`;
             document.getElementById('sum-lang').innerText = student.lang;
@@ -1131,7 +1211,7 @@
             document.getElementById('user-display').classList.add('hidden');
 
             // Store result in Database
-            submitResultToDB(diff);
+            submitResultToDB(timeSpentSeconds);
 
             // Exit fullscreen if active
             if (document.fullscreenElement) {
@@ -1260,7 +1340,7 @@
                 if (timeLeft <= 300) display.style.color = '#ff5f56';
                 if (timeLeft <= 0) {
                     clearInterval(interval);
-                    submitExam(true);
+                    finishChallenge(true);
                 }
             }, 1000);
         }
