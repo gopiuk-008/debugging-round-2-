@@ -803,7 +803,8 @@
             student.name = document.getElementById('reg-name').value;
             student.roll = document.getElementById('reg-roll').value;
             student.dept = document.getElementById('reg-dept').value;
-            student.code = `DBG26-${student.dept.substring(0, 2).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+            // Temporary session code (will be replaced by backend on submit)
+            student.code = `SESSION-${Math.floor(1000 + Math.random() * 9000)}`;
             document.getElementById('rules-modal').classList.add('active');
         }
 
@@ -943,7 +944,7 @@
         async function submitResultToDB(timeSpent) {
             const payload = {
                 name: student.name, rollNumber: student.roll, department: student.dept,
-                uniqueCode: student.code, round: currentRound, language: student.lang,
+                round: currentRound, language: student.lang,
                 timeSpentSeconds: timeSpent, attemptedCount: attemptedProblemIds.size,
                 solvedCount: solvedProblemIds.size
             };
@@ -953,9 +954,18 @@
                     body: JSON.stringify(payload)
                 });
                 const result = await res.json();
-                if (res.ok) {
+                if (res.ok && result.success) {
+                    student.code = result.uniqueId;
+                    document.getElementById('sum-code').innerText = result.uniqueId;
+                    document.getElementById('header-code').innerText = result.uniqueId;
+
                     document.getElementById('sum-db-box').style.display = 'block';
                     document.getElementById('sum-db-id').innerText = result.id;
+                } else if (result.uniqueId) {
+                    // Already submitted
+                    student.code = result.uniqueId;
+                    document.getElementById('sum-code').innerText = result.uniqueId;
+                    document.getElementById('header-code').innerText = result.uniqueId;
                 }
             } catch (e) { console.error("Sync Error:", e); }
         }
@@ -1023,9 +1033,9 @@
                 const data = await res.json();
                 if (res.ok) {
                     if (data.length === 0) { content.innerHTML = '<p>No results yet.</p>'; return; }
-                    let html = `<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Name</th><th>R</th><th>Solved</th><th>Time</th></tr></thead><tbody>`;
+                    let html = `<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Name</th><th>ID</th><th>Solved</th><th>Time</th></tr></thead><tbody>`;
                     data.forEach((r, i) => {
-                        html += `<tr><td>#${i + 1}</td><td>${r.name}<br><small>${r.roll_number}</small></td><td>R${r.round || 1}</td><td>${r.solved_count}/10</td><td>${Math.floor(r.time_spent_seconds / 60)}m</td></tr>`;
+                        html += `<tr><td>#${i + 1}</td><td>${r.name}<br><small>${r.roll_number}</small></td><td><small style="color: var(--accent-orange); font-family: var(--font-code);">${r.unique_id || '---'}</small></td><td>${r.solved_count}/10</td><td>${Math.floor(r.time_spent_seconds / 60)}m</td></tr>`;
                     });
                     content.innerHTML = html + '</tbody></table>';
                 }

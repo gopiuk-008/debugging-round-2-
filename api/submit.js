@@ -5,7 +5,7 @@ const ResultSchema = new mongoose.Schema({
     name: { type: String, required: true },
     rollNumber: { type: String, required: true },
     department: { type: String, required: true },
-    uniqueCode: { type: String, required: true },
+    uniqueId: { type: String, required: true, unique: true }, // System generated
     round: { type: Number, required: true },
     language: { type: String, required: true },
     timeSpentSeconds: { type: Number, required: true },
@@ -33,14 +33,19 @@ const connectDB = async () => {
     });
 };
 
+const generateUniqueId = () => {
+    const randomDigits = Math.floor(1000 + Math.random() * 9000);
+    return `DBG26-B-${randomDigits}`;
+};
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    const { name, rollNumber, department, uniqueCode, round, language, timeSpentSeconds, attemptedCount, solvedCount } = req.body;
+    const { name, rollNumber, department, round, language, timeSpentSeconds, attemptedCount, solvedCount } = req.body;
 
-    if (!name || !rollNumber || !uniqueCode || !language || round === undefined) {
+    if (!name || !rollNumber || !department || !language || round === undefined) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -50,23 +55,50 @@ export default async function handler(req, res) {
         // Check if this user has already submitted for THIS SPECIFIC round
         const existingSubmission = await Result.findOne({ rollNumber, round });
         if (existingSubmission) {
-            return res.status(400).json({ error: `You have already submitted results for Round ${round}.` });
+            return res.status(400).json({
+                error: `You have already submitted results for Round ${round}.`,
+                uniqueId: existingSubmission.uniqueId
+            });
+        }
+
+        // Generate a unique ID that doesn't exist yet
+        let uniqueId;
+        let isUnique = false;
+        let attempts = 0;
+        while (!isUnique && attempts < 10) {
+            uniqueId = generateUniqueId();
+            const collision = await Result.findOne({ uniqueId });
+            if (!collision) {
+                isUnique = true;
+            }
+            attempts++;
+        }
+
+        if (!isUnique) {
+            throw new Error('Failed to generate a unique system ID after multiple attempts');
         }
 
         // Insert new result
         const newResult = new Result({
-            name, rollNumber, department, uniqueCode, round, language,
+            name, rollNumber, department, uniqueId, round, language,
             timeSpentSeconds, attemptedCount, solvedCount
         });
 
         const savedResult = await newResult.save();
+        console.log(`Saved result with uniqueId: ${uniqueId}`);
 
         return res.status(200).json({
+            success: true,
             message: 'Result stored successfully',
+            uniqueId: savedResult.uniqueId,
             id: savedResult._id
         });
     } catch (error) {
         console.error('Database Error:', error);
-        return res.status(500).json({ error: 'Failed to store result', details: error.message });
+        return res.status(500).json({
+            success: false,
+            error: 'Failed to store result',
+            details: error.message
+        });
     }
 }
