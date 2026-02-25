@@ -793,6 +793,16 @@
         let userSubmissions = {};
         let hasSubmitted = false; // Guard: prevent duplicate DB submissions
 
+        // Fisher-Yates shuffle — gives each student a unique question order
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
         function validateReg() {
             const name = document.getElementById('reg-name').value;
             const roll = document.getElementById('reg-roll').value;
@@ -831,7 +841,7 @@
 
         function initRound() {
             student.lang = 'Java';
-            SESSION_PROBLEMS = ALL_PROBLEMS;
+            SESSION_PROBLEMS = shuffleArray(ALL_PROBLEMS); // Shuffle for each user
 
             // UI updates
             const langSelect = document.getElementById('workspace-lang');
