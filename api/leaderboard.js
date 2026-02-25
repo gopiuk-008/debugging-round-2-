@@ -17,11 +17,19 @@ const ResultSchema = new mongoose.Schema({
 const Result = mongoose.models.Result || mongoose.model('Result', ResultSchema, 'result2');
 
 const connectDB = async () => {
-    if (mongoose.connection.readyState >= 1) return;
-    if (!process.env.MONGODB_URI) {
-        throw new Error('MONGODB_URI is not defined in .env.local');
+    if (mongoose.connection.readyState >= 1) {
+        console.log('Using existing MongoDB connection');
+        return;
     }
-    return mongoose.connect(process.env.MONGODB_URI);
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+        console.error('MONGODB_URI is missing from environment variables');
+        throw new Error('MONGODB_URI is not defined');
+    }
+    console.log('Connecting to MongoDB...');
+    return mongoose.connect(uri, {
+        serverSelectionTimeoutMS: 10000, // 10s timeout
+    });
 };
 
 export default async function handler(req, res) {
