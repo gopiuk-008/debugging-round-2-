@@ -961,13 +961,20 @@
 
                     document.getElementById('sum-db-box').style.display = 'block';
                     document.getElementById('sum-db-id').innerText = result.id;
+                    alert("Submission Successful!\nYour Unique ID: " + result.uniqueId);
                 } else if (result.uniqueId) {
                     // Already submitted
                     student.code = result.uniqueId;
                     document.getElementById('sum-code').innerText = result.uniqueId;
                     document.getElementById('header-code').innerText = result.uniqueId;
+                    alert("Submission Already Recorded.\nUnique ID: " + result.uniqueId);
+                } else {
+                    alert("Submission failed: " + (result.error || "Unknown error"));
                 }
-            } catch (e) { console.error("Sync Error:", e); }
+            } catch (e) {
+                console.error("Sync Error:", e);
+                alert("Network error: Could not connect to database.");
+            }
         }
 
         function setupSecurity() {
