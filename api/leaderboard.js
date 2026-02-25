@@ -6,6 +6,7 @@ const ResultSchema = new mongoose.Schema({
     rollNumber: String,
     department: String,
     uniqueCode: String,
+    round: Number,
     language: String,
     timeSpentSeconds: Number,
     attemptedCount: Number,
@@ -32,7 +33,7 @@ export default async function handler(req, res) {
         await connectDB();
 
         const data = await Result.find()
-            .select('name rollNumber solvedCount timeSpentSeconds')
+            .select('name rollNumber solvedCount timeSpentSeconds round')
             .sort({ solvedCount: -1, timeSpentSeconds: 1 })
             .limit(50);
 
@@ -41,7 +42,8 @@ export default async function handler(req, res) {
             name: row.name,
             roll_number: row.rollNumber,
             solved_count: row.solvedCount,
-            time_spent_seconds: row.timeSpentSeconds
+            time_spent_seconds: row.timeSpentSeconds,
+            round: row.round
         }));
 
         return res.status(200).json(formattedData);

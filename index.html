@@ -709,148 +709,148 @@
 
     <script>
         const PROBLEMS = [
-            // JAVA PROBLEMS (1-10)
+            // ROUND 1: C PROGRAMMING (HARD)
             {
-                id: 1, lang: 'Java', title: 'Binary Search Fix', diff: 'Moderate',
-                desc: 'The binary search implementation is stuck in an infinite loop when the target is not present. Fix the boundary updates.',
-                example: 'Input: [1,2,3,4,5], find 6. Expected: -1',
-                initialCode: 'public class Main {\n    public static int search(int[] arr, int x) {\n        int low = 0, high = arr.length - 1;\n        while(low <= high) {\n            int mid = (low + high) / 2;\n            if(arr[mid] == x) return mid;\n            if(arr[mid] < x) low = mid;\n            else high = mid;\n        }\n        return -1;\n    }\n    public static void main(String[] args) {\n        System.out.println(search(new int[]{1, 2, 4, 5}, 3));\n    }\n}',
-                bugOutput: 'Console: (Timed Out / Infinite Loop)'
+                id: 1, round: 1, lang: 'C', title: 'C Pointer arithmetic', diff: 'Hard',
+                desc: 'The pointer arithmetic in this function is incorrect, causing it to access memory outside the array bounds.',
+                example: 'Input: [10, 20, 30], get index 2. Expected: 30',
+                initialCode: '#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30};\n    int *ptr = arr;\n    // Accessing index 2\n    printf("%d", *(ptr + 4)); // Bug: incorrect offset\n    return 0;\n}',
+                bugOutput: 'Console: (Garbage Value or Crash)'
             },
             {
-                id: 2, lang: 'Java', title: 'Matrix Transpose', diff: 'Moderate',
-                desc: 'The code is supposed to transpose a square matrix in-place, but the output remains the same as the input. Find why.',
-                example: 'Input: [[1,2],[3,4]], Expected: [[1,3],[2,4]]',
-                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int[][] m = {{1, 2}, {3, 4}};\n        int n = 2;\n        for(int i=0; i<n; i++) {\n            for(int j=0; j<n; j++) {\n                int t = m[i][j];\n                m[i][j] = m[j][i];\n                m[j][i] = t;\n            }\n        }\n        System.out.println(m[0][1]); // Should be 3\n    }\n}',
-                bugOutput: 'Console: 2'
+                id: 2, round: 1, lang: 'C', title: 'C Memory leak', diff: 'Hard',
+                desc: 'This function has a memory leak and potential crash due to improper allocation size for a string.',
+                example: 'Input: "Hello", Expected: Space allocated for 5 chars + null',
+                initialCode: '#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\nint main() {\n    char *s = malloc(5); // Bug: not enough for null terminator\n    strcpy(s, "Hello");\n    printf("%s", s);\n    // Missing free(s);\n    return 0;\n}',
+                bugOutput: 'Console: Hello (but memory issues exist)'
             },
             {
-                id: 3, lang: 'Java', title: 'Second Largest Finder', diff: 'Moderate',
-                desc: 'This function fails to find the correct second largest number in certain arrays. Identify the missing logic.',
-                example: 'Input: [10, 5, 8], Expected: 8',
-                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int[] arr = {10, 5, 12, 9};\n        int first = 0, second = 0;\n        for(int n : arr) {\n            if(n > first) {\n                second = first;\n                first = n;\n            }\n            // Missing logic for elements between first and second\n        }\n        System.out.println(second);\n    }\n}',
-                bugOutput: 'Console: 10'
+                id: 3, round: 1, lang: 'C', title: 'C Double Free', diff: 'Hard',
+                desc: 'A double free error occurs in this cleanup logic. Identify and fix it.',
+                example: 'Expected: No crash',
+                initialCode: '#include <stdio.h>\n#include <stdlib.h>\nint main() {\n    int *p = malloc(sizeof(int));\n    *p = 10;\n    free(p);\n    if(p != NULL) {\n        free(p); // Bug: Double free\n    }\n    return 0;\n}',
+                bugOutput: 'Exception: Abort / Segmentation Fault'
             },
             {
-                id: 4, lang: 'Java', title: 'Anagram Checker', diff: 'Moderate',
-                desc: 'The anagram checker is case-sensitive and doesn\'t handle different lengths correctly in some cases. Fix it to be robust.',
-                example: 'Input: "Listen", "Silent", Expected: true',
-                initialCode: 'import java.util.Arrays;\npublic class Main {\n    public static boolean isAnagram(String s1, String s2) {\n        char[] a1 = s1.toCharArray();\n        char[] a2 = s2.toCharArray();\n        Arrays.sort(a1);\n        Arrays.sort(a2);\n        return Arrays.equals(a1, a2);\n    }\n    public static void main(String[] args) {\n        System.out.println(isAnagram("Listen", "Silent"));\n    }\n}',
-                bugOutput: 'Console: false'
-            },
-            {
-                id: 5, lang: 'Java', title: 'Remove Duplicates', diff: 'Moderate',
-                desc: 'The logic for removing duplicates from a sorted array is incorrectly counting the unique elements.',
-                example: 'Input: [1, 1, 2], Expected Size: 2',
-                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int[] nums = {1, 1, 2, 2, 3};\n        int j = 0;\n        for(int i=0; i<nums.length; i++) {\n            if(nums[i] != nums[j]) {\n                nums[j] = nums[i];\n                j++;\n            }\n        }\n        System.out.println(j);\n    }\n}',
-                bugOutput: 'Console: 2'
-            },
-            {
-                id: 6, lang: 'Java', title: 'Palindrome Integer', diff: 'Moderate',
-                desc: 'Fix the integer reversal logic to correctly identify palindromes without using strings.',
-                example: 'Input: 121, Expected: true',
-                initialCode: 'public class Main {\n    public static boolean isPalindrome(int x) {\n        if(x < 0) return true; // Bug: Negative numbers aren\'t palindromes\n        int rev = 0, temp = x;\n        while(temp > 0) {\n            rev = rev * 10 + temp % 10;\n            temp /= 100; // Bug: Increment logic\n        }\n        return x == rev;\n    }\n    public static void main(String[] args) {\n        System.out.println(isPalindrome(121));\n    }\n}',
-                bugOutput: 'Console: false'
-            },
-            {
-                id: 7, lang: 'Java', title: 'Missing Number', diff: 'Moderate',
-                desc: 'The formula-based approach to find the missing number in range [0, n] is slightly off. Find and fix it.',
-                example: 'Input: [0, 1, 3], Expected: 2',
-                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int[] nums = {0, 1, 3};\n        int n = nums.length;\n        int expectedSum = n * (n - 1) / 2; // Bug: Formula error\n        int actualSum = 0;\n        for(int x : nums) actualSum += x;\n        System.out.println(expectedSum - actualSum);\n    }\n}',
-                bugOutput: 'Console: 0'
-            },
-            {
-                id: 8, lang: 'Java', title: 'String Compression', diff: 'Moderate',
-                desc: 'This code compresses "aaabbc" to "a3b2c1", but it misses the last character group.',
-                example: 'Input: "aaabbc", Expected: "a3b2c1"',
-                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        String s = "aaabbc", res = "";\n        int count = 1;\n        for(int i=0; i<s.length()-1; i++) {\n            if(s.charAt(i) == s.charAt(i+1)) count++;\n            else {\n                res += s.charAt(i) + "" + count;\n                count = 1;\n            }\n        }\n        // Missing logic for final group\n        System.out.println(res);\n    }\n}',
-                bugOutput: 'Console: a3b2'
-            },
-            {
-                id: 9, lang: 'Java', title: 'Valid Brackets', diff: 'Moderate',
-                desc: 'The bracket sequence validator is incorrectly returning true for mismatched single brackets.',
-                example: 'Input: "]", Expected: false',
-                initialCode: 'import java.util.Stack;\npublic class Main {\n    public static boolean isValid(String s) {\n        Stack<Character> stack = new Stack<>();\n        for(char c : s.toCharArray()) {\n            if(c == \'(\') stack.push(\')\');\n            else if(c == \'{\') stack.push(\'}\');\n            else if(c == \'[\') stack.push(\']\');\n            else if(stack.isEmpty() || stack.pop() != c) return true; // Bug: logic inverted\n        }\n        return stack.isEmpty();\n    }\n    public static void main(String[] args) {\n        System.out.println(isValid("]"));\n    }\n}',
-                bugOutput: 'Console: true'
-            },
-            {
-                id: 10, lang: 'Java', title: 'Array Row Sum', diff: 'Moderate',
-                desc: 'The nested loop is summing columns instead of rows. Fix the indexing.',
-                example: 'Input: [[1,1],[2,2]], Expected Row 0 Sum: 2',
-                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int[][] arr = {{1, 1}, {2, 2}};\n        for(int i=0; i<2; i++) {\n            int sum = 0;\n            for(int j=0; j<2; j++) {\n                sum += arr[j][i]; // Bug: transposing index\n            }\n            System.out.println("Row " + i + ": " + sum);\n        }\n    }\n}',
-                bugOutput: 'Console: Row 0: 3'
-            },
-
-            // C PROBLEMS (11-20)
-            {
-                id: 11, lang: 'C', title: 'C Bubble Sort', diff: 'Moderate',
-                desc: 'Fix the off-by-one error in this C implementation of Bubble Sort that causes a crash.',
-                example: 'Input: [3, 1, 2], Expected: [1, 2, 3]',
-                initialCode: '#include <stdio.h>\nint main() {\n    int a[] = {3, 1, 2}, n = 3;\n    for(int i=0; i<n; i++) {\n        for(int j=0; j<n; j++) {\n            if(a[j] > a[j+1]) {\n                int t = a[j]; a[j] = a[j+1]; a[j+1] = t;\n            }\n        }\n    }\n    printf("%d %d %d", a[0], a[1], a[2]);\n    return 0;\n}',
+                id: 4, round: 1, lang: 'C', title: 'C File Pointer', diff: 'Hard',
+                desc: 'The file handling logic is unsafe and missing null checks for the file pointer.',
+                example: 'Expected: Safe file reading',
+                initialCode: '#include <stdio.h>\nint main() {\n    FILE *f = fopen("nonexistent.txt", "r");\n    char buf[100];\n    fgets(buf, 100, f); // Bug: f might be NULL\n    printf("%s", buf);\n    fclose(f);\n    return 0;\n}',
                 bugOutput: 'Exception: Segmentation Fault'
             },
             {
-                id: 12, lang: 'C', title: 'C String Copy', diff: 'Moderate',
-                desc: 'The custom string copy function is leaving garbage values at the end of the destination string.',
-                example: 'Input: "Hi", Output should be exactly "Hi"',
-                initialCode: '#include <stdio.h>\nvoid my_strcpy(char *dest, char *src) {\n    while(*src != \'\\0\') {\n        *dest++ = *src++;\n    }\n    // Missing something?\n}\nint main() {\n    char s[10], d[10] = "XXXXXXXXX";\n    my_strcpy(d, "Hi");\n    printf("%s", d);\n    return 0;\n}',
-                bugOutput: 'Console: HiXXXXXXX'
+                id: 5, round: 1, lang: 'C', title: 'C Buffer Overflow', diff: 'Hard',
+                desc: 'The use of gets() is dangerous. Fix the buffer overflow vulnerability.',
+                example: 'Expected: Secure input handling',
+                initialCode: '#include <stdio.h>\nint main() {\n    char name[10];\n    printf("Enter name: ");\n    gets(name); // Bug: Dangerous function\n    printf("Hello %s", name);\n    return 0;\n}',
+                bugOutput: 'Console: (Potential Security Risk/Crash)'
             },
             {
-                id: 13, lang: 'C', title: 'C Recursive Sum', diff: 'Moderate',
-                desc: 'The recursive function to sum digits is skipping digits. Correct the recursive call.',
-                example: 'Input: 123, Expected: 6',
-                initialCode: '#include <stdio.h>\nint sumDigits(int n) {\n    if(n == 0) return 0;\n    return (n % 10) + sumDigits(n / 100); // Bug here\n}\nint main() {\n    printf("%d", sumDigits(123));\n    return 0;\n}',
-                bugOutput: 'Console: 4'
+                id: 6, round: 1, lang: 'C', title: 'C Dangling Pointer', diff: 'Hard',
+                desc: 'The function returns a pointer to a local variable which becomes dangling.',
+                example: 'Expected: Valid pointer or value returned',
+                initialCode: '#include <stdio.h>\nint* getVal() {\n    int x = 100;\n    return &x; // Bug: local address returned\n}\nint main() {\n    int *p = getVal();\n    printf("%d", *p);\n    return 0;\n}',
+                bugOutput: 'Console: (Garbage/Crash)'
             },
             {
-                id: 14, lang: 'C', title: 'C Dynamic Avg', diff: 'Moderate',
-                desc: 'The average is incorrect because of a common memory allocation mistake in C.',
-                example: 'Input: 2 numbers (10, 20), Expected: 15.0',
-                initialCode: '#include <stdio.h>\n#include <stdlib.h>\nint main() {\n    int n = 2;\n    int *arr = malloc(n); // Bug: Improper size\n    arr[0] = 10; arr[1] = 20;\n    float avg = (arr[0] + arr[1]) / 2.0;\n    printf("%.1f", avg);\n    free(arr);\n    return 0;\n}',
-                bugOutput: 'Console: (Crash/Garbage)'
+                id: 7, round: 1, lang: 'C', title: 'C Struct Padding', diff: 'Hard',
+                desc: 'Calculated size of struct is incorrect because of padding assumptions. Use the right way to get size.',
+                example: 'Expected: Actual struct size',
+                initialCode: '#include <stdio.h>\nstruct Data { char c; int i; };\nint main() {\n    // Assuming char(1) + int(4) = 5\n    int expected = 5;\n    if(sizeof(struct Data) == expected) printf("Match");\n    else printf("Mismatch: %zu", sizeof(struct Data));\n    return 0;\n}',
+                bugOutput: 'Console: Mismatch: 8'
             },
             {
-                id: 15, lang: 'C', title: 'C Factorial Power', diff: 'Moderate',
-                desc: 'The power function fails for any exponent greater than 1 due to a loop condition error.',
-                example: 'Input: 2^3, Expected: 8',
-                initialCode: '#include <stdio.h>\nint power(int b, int e) {\n    int res = 1;\n    for(int i=0; i<e-1; i++) { // Bug: Loop runs too few times\n        res *= b;\n    }\n    return res;\n}\nint main() {\n    printf("%d", power(2, 3));\n    return 0;\n}',
-                bugOutput: 'Console: 4'
+                id: 8, round: 1, lang: 'C', title: 'C String Compare', diff: 'Hard',
+                desc: 'Comparing strings using == is a common mistake in C. Use the correct function.',
+                example: 'Input: "test", "test", Expected: Match',
+                initialCode: '#include <stdio.h>\nint main() {\n    char s1[] = "test";\n    char s2[] = "test";\n    if(s1 == s2) printf("Match"); // Bug: comparing addresses\n    else printf("Mismatch");\n    return 0;\n}',
+                bugOutput: 'Console: Mismatch'
             },
             {
-                id: 16, lang: 'C', title: 'C Find Max', diff: 'Moderate',
-                desc: 'Initializing max to 0 causes issues with negative numbers. Fix the initialization.',
-                example: 'Input: [-5, -2, -10], Expected: -2',
-                initialCode: '#include <stdio.h>\nint main() {\n    int a[] = {-5, -2, -10};\n    int m = 0; // Bug: Incorrect init\n    for(int i=0; i<3; i++) if(a[i] > m) m = a[i];\n    printf("%d", m);\n    return 0;\n}',
-                bugOutput: 'Console: 0'
+                id: 9, round: 1, lang: 'C', title: 'C Array Size', diff: 'Hard',
+                desc: 'Passing an array to a function and trying to find its size inside doesn\'t work. Fix it.',
+                example: 'Expected size: 5',
+                initialCode: '#include <stdio.h>\nvoid printSize(int arr[]) {\n    printf("%zu", sizeof(arr) / sizeof(arr[0])); // Bug\n}\nint main() {\n    int a[] = {1, 2, 3, 4, 5};\n    printSize(a);\n    return 0;\n}',
+                bugOutput: 'Console: 2 (on 64-bit)'
             },
             {
-                id: 17, lang: 'C', title: 'C String Reverse', diff: 'Moderate',
-                desc: 'The loop for in-place string reversal is swapping characters twice, resulting in no change.',
-                example: 'Input: "abc", Expected: "cba"',
-                initialCode: '#include <stdio.h>\n#include <string.h>\nint main() {\n    char s[] = "abc";\n    int n = strlen(s);\n    for(int i=0; i<n; i++) {\n        char t = s[i];\n        s[i] = s[n-i-1];\n        s[n-i-1] = t;\n    }\n    printf("%s", s);\n    return 0;\n}',
-                bugOutput: 'Console: abc'
+                id: 10, round: 1, lang: 'C', title: 'C Linked List Loop', diff: 'Hard',
+                desc: 'The linked list traversal goes into an infinite loop due to a broken pointer assignment.',
+                example: 'Expected: Print 1 to 3',
+                initialCode: '#include <stdio.h>\n#include <stdlib.h>\nstruct Node { int v; struct Node *next; };\nint main() {\n    struct Node *h = malloc(sizeof(struct Node));\n    h->v = 1; h->next = h; // Bug: Cycle created\n    printf("%d", h->v);\n    return 0;\n}',
+                bugOutput: 'Console: (Timed Out)'
+            },
+
+            // ROUND 2: JAVA PROGRAMMING (MODERATE/HARD)
+            {
+                id: 11, round: 2, lang: 'Java', title: 'Java Static Ref', diff: 'Moderate',
+                desc: 'The static variable is shared across instances, leading to incorrect calculations.',
+                example: 'Expected for obj2: 10',
+                initialCode: 'class Calculator {\n    static int val = 0;\n    void add(int x) { val += x; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Calculator c1 = new Calculator();\n        c1.add(10);\n        Calculator c2 = new Calculator();\n        c2.add(10);\n        System.out.println(c2.val); // Bug: prints 20\n    }\n}',
+                bugOutput: 'Console: 20'
             },
             {
-                id: 18, lang: 'C', title: 'C Decimal to Binary', diff: 'Moderate',
-                desc: 'The output is printed in reverse order. Fix the loop to store bits and print correctly.',
-                example: 'Input: 5, Expected: 101',
-                initialCode: '#include <stdio.h>\nint main() {\n    int n = 5;\n    while(n > 0) {\n        printf("%d", n % 2);\n        n /= 2;\n    }\n    return 0;\n}',
-                bugOutput: 'Console: 101 (Wait, for 5 it is correct? No, for 6: 110, output: 011)'
+                id: 12, round: 2, lang: 'Java', title: 'Java Swallowed Exception', diff: 'Hard',
+                desc: 'An exception is being swallowed, making it impossible to debug root causes. Fix it to propagate correctly.',
+                example: 'Expected: Stack trace or error message',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        try {\n            int x = 10 / 0;\n        } catch(Exception e) {\n            // Bug: Empty catch block (swallowed)\n        }\n    }\n}',
+                bugOutput: 'Console: (Empty)'
             },
             {
-                id: 19, lang: 'C', title: 'C Struct Swap', diff: 'Moderate',
-                desc: 'The swap function is passing structs by value. Fix to pass by pointer.',
-                example: 'Expected: Points swapped',
-                initialCode: '#include <stdio.h>\ntypedef struct { int x, y; } Point;\nvoid swap(Point a, Point b) {\n    Point t = a; a = b; b = t;\n}\nint main() {\n    Point p1={1,1}, p2={2,2};\n    swap(p1, p2);\n    printf("%d %d", p1.x, p2.x);\n    return 0;\n}',
-                bugOutput: 'Console: 1 2'
+                id: 13, round: 2, lang: 'Java', title: 'Java Equals vs ==', diff: 'Moderate',
+                desc: 'Comparing strings with == is failing for strings created at runtime.',
+                example: 'Expected: true',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        String s1 = new String("test");\n        String s2 = new String("test");\n        System.out.println(s1 == s2); // Bug: == checks address\n    }\n}',
+                bugOutput: 'Console: false'
             },
             {
-                id: 20, lang: 'C', title: 'C Matrix Addition', diff: 'Moderate',
-                desc: 'The nested loop is incorrectly using i for both row and column indexing in the sum.',
-                example: 'Input: [[1],[1]] + [[1],[1]], Expected: [[2],[2]]',
-                initialCode: '#include <stdio.h>\nint main() {\n    int a[2][2]={{1,1},{1,1}}, b[2][2]={{1,1},{1,1}}, c[2][2];\n    for(int i=0; i<2; i++) {\n        for(int j=0; j<2; j++) {\n            c[i][j] = a[i][i] + b[i][i]; // Bug here\n        }\n    }\n    printf("%d", c[0][0]);\n    return 0;\n}',
-                bugOutput: 'Console: 2 (Wait, check output logic)'
+                id: 14, round: 2, lang: 'Java', title: 'Java Concurrent Mod', diff: 'Hard',
+                desc: 'Removing an item from a list while iterating using a for-each loop causes a crash.',
+                example: 'Expected: List items removed safely',
+                initialCode: 'import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        List<String> list = new ArrayList<>(Arrays.asList("A", "B"));\n        for(String s : list) {\n            if(s.equals("A")) list.remove(s); // Bug\n        }\n    }\n}',
+                bugOutput: 'Exception: ConcurrentModificationException'
+            },
+            {
+                id: 15, round: 2, lang: 'Java', title: 'Java Null Pointer', diff: 'Moderate',
+                desc: 'Missing null check before calling a method on an object.',
+                example: 'Expected: Handle null safely',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        String s = null;\n        System.out.println(s.length()); // Bug\n    }\n}',
+                bugOutput: 'Exception: NullPointerException'
+            },
+            {
+                id: 16, round: 2, lang: 'Java', title: 'Java Array Bounds', diff: 'Moderate',
+                desc: 'The loop goes one index too far.',
+                example: 'Input: [1,2], Expected: 1, 2',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        int[] a = {1, 2};\n        for(int i=0; i<=a.length; i++) {\n            System.out.println(a[i]); // Bug\n        }\n    }\n}',
+                bugOutput: 'Exception: ArrayIndexOutOfBoundsException'
+            },
+            {
+                id: 17, round: 2, lang: 'Java', title: 'Java Method Overload', diff: 'Hard',
+                desc: 'The wrong overloaded method is called due to type casting mismatch.',
+                example: 'Expected: Double method called',
+                initialCode: 'public class Main {\n    static void print(int x) { System.out.println("Int"); }\n    static void print(double x) { System.out.println("Double"); }\n    public static void main(String[] args) {\n        print(10); // How to call double version?\n    }\n}',
+                bugOutput: 'Console: Int'
+            },
+            {
+                id: 18, round: 2, lang: 'Java', title: 'Java Integer Cache', diff: 'Hard',
+                desc: 'Comparing Integers with == only works for small values (up to 127) due to caching.',
+                example: 'Input: 200, Expected: true',
+                initialCode: 'public class Main {\n    public static void main(String[] args) {\n        Integer a = 200, b = 200;\n        System.out.println(a == b); // Bug: beyond cache range\n    }\n}',
+                bugOutput: 'Console: false'
+            },
+            {
+                id: 19, round: 2, lang: 'Java', title: 'Java Constructor Leak', diff: 'Hard',
+                desc: 'The "this" reference is leaked before the object is fully constructed.',
+                example: 'Expected: Safe construction',
+                initialCode: 'class Event {\n    Event(Listener l) { l.onEvent(this); }\n}\ninterface Listener { void onEvent(Event e); }\npublic class Main {\n    public static void main(String[] args) {\n        // Context: Leak issue\n    }\n}',
+                bugOutput: 'Console: (Object partially initialized)'
+            },
+            {
+                id: 20, round: 2, lang: 'Java', title: 'Java Finalize Method', diff: 'Moderate',
+                desc: 'Relying on finalize() for resource cleanup is deprecated and unreliable.',
+                example: 'Expected: Use try-with-resources',
+                initialCode: 'class Resource {\n    protected void finalize() { System.out.println("Cleanup"); }\n}\npublic class Main {\n    public static void main(String[] args) {\n        new Resource();\n        System.gc(); // Unreliable\n    }\n}',
+                bugOutput: 'Console: (Cleanup might not print)'
             }
         ];
 
@@ -858,9 +858,9 @@
         let SESSION_PROBLEMS = [];
         let activeProbIdx = -1;
         let student = { name: '', roll: '', dept: '', code: '', lang: '' };
-        let points = 0;
-        let timeLeft = 1800; // 30 mins
-        let startTime, examStarted = false;
+        let currentRound = 1;
+        let examStarted = false;
+        let startTime, timeLeft = 1800;
         let violations = 0;
         let solvedProblemIds = new Set();
         let attemptedProblemIds = new Set();
@@ -881,44 +881,6 @@
             document.getElementById('rules-modal').classList.add('active');
         }
 
-        function changeLanguage() {
-            const lang = document.getElementById('workspace-lang').value;
-            if (!lang) {
-                student.lang = '';
-                SESSION_PROBLEMS = [];
-                initProblemsList();
-                resetWorkspaceUI();
-                return;
-            }
-
-            if (student.lang && student.lang !== lang) {
-                if (!confirm("Changing language will reset all current progress. Continue?")) {
-                    document.getElementById('workspace-lang').value = student.lang;
-                    return;
-                }
-                userSubmissions = {};
-                solvedProblemIds = new Set();
-                attemptedProblemIds = new Set();
-            }
-
-            student.lang = lang;
-            SESSION_PROBLEMS = ALL_PROBLEMS.filter(p => p.lang === student.lang);
-            shuffleArray(SESSION_PROBLEMS);
-            initProblemsList();
-            selectProblem(0);
-        }
-
-        function resetWorkspaceUI() {
-            document.getElementById('prob-title').innerText = "Select a Language to Begin";
-            document.getElementById('prob-meta').innerHTML = "";
-            document.getElementById('prob-desc').innerHTML = "<p>Select a programming language from the editor header to see problems.</p>";
-            document.getElementById('code-editor').value = "";
-            document.getElementById('console-output').innerText = 'Click "Run" to see output.';
-            document.getElementById('next-btn').style.display = 'block';
-            document.getElementById('finish-btn').style.display = 'none';
-            document.querySelector('.sidebar-header').innerText = `PROBLEMS (0)`;
-        }
-
         function agreeRules() {
             const elem = document.documentElement;
             if (elem.requestFullscreen) elem.requestFullscreen();
@@ -934,57 +896,39 @@
             document.getElementById('user-display').classList.remove('hidden');
             document.getElementById('registration-screen').classList.remove('active');
             document.getElementById('competition-screen').classList.add('active');
-            resetWorkspaceUI();
+            initRound(currentRound);
             startTimer();
             setupSecurity();
         }
 
-        function setupSecurity() {
-            window.addEventListener('blur', recordViolation);
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) recordViolation();
-            });
-            document.addEventListener('contextmenu', e => e.preventDefault());
-            document.addEventListener('keydown', e => {
-                if ((e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'u')) || e.key === 'F12') {
-                    e.preventDefault();
-                }
-            });
-        }
+        function initRound(round) {
+            currentRound = round;
+            student.lang = (round === 1) ? 'C' : 'Java';
+            SESSION_PROBLEMS = ALL_PROBLEMS.filter(p => p.round === round);
 
-        function recordViolation() {
-            if (!examStarted) return;
-            violations++;
-            const countDisplay = document.getElementById('violation-count');
-            countDisplay.innerText = `Warnings: ${violations}/2`;
-            countDisplay.style.display = 'block';
-            if (violations === 1) {
-                const warning = document.getElementById('violation-warning');
-                warning.style.display = 'block';
-                setTimeout(() => warning.style.display = 'none', 5000);
-            } else if (violations >= 2) {
-                terminateSession();
-            }
-        }
+            // UI updates for round
+            document.getElementById('workspace-lang').value = student.lang;
+            document.getElementById('workspace-lang').disabled = true; // Lock language
+            document.querySelector('.sidebar-header').innerText = `ROUND ${round}: ${student.lang} (${SESSION_PROBLEMS.length})`;
 
-        function terminateSession() {
-            examStarted = false;
-            alert("Session terminated due to multiple tab switching violations.");
-            finishChallenge(true, true);
+            // Reset per-round stats
+            solvedProblemIds = new Set();
+            attemptedProblemIds = new Set();
+            userSubmissions = {};
+            activeProbIdx = -1;
+
+            initProblemsList();
+            selectProblem(0);
         }
 
         function initProblemsList() {
             const list = document.getElementById('problem-list');
             list.innerHTML = '';
-            document.querySelector('.sidebar-header').innerText = `PROBLEMS (${SESSION_PROBLEMS.length})`;
             SESSION_PROBLEMS.forEach((p, i) => {
                 const div = document.createElement('div');
                 div.className = 'problem-item';
                 div.id = `prob-item-${i}`;
-                div.onclick = () => {
-                    if (!examStarted) selectProblem(i);
-                    else alert("Sequence navigation only. Use the Next button.");
-                };
+                div.onclick = () => { selectProblem(i); };
                 div.innerHTML = `<span class="status-dot" id="dot-${p.id}"></span> ${i + 1}. ${p.title}`;
                 list.appendChild(div);
             });
@@ -1006,11 +950,13 @@
             document.getElementById('prob-desc').innerHTML = `<p>${p.desc}</p><div class="example-block">${p.example}</div>`;
             document.getElementById('code-editor').value = userSubmissions[p.id] || p.initialCode;
             document.getElementById('console-output').innerText = 'Click "Run" to see output.';
+
             const nextBtn = document.getElementById('next-btn');
             const finishBtn = document.getElementById('finish-btn');
             if (activeProbIdx === SESSION_PROBLEMS.length - 1) {
                 nextBtn.style.display = 'none';
                 finishBtn.style.display = 'block';
+                finishBtn.innerText = currentRound === 1 ? 'Finish Round 1' : 'Final Submit';
             } else {
                 nextBtn.style.display = 'inline-block';
                 finishBtn.style.display = 'none';
@@ -1021,34 +967,18 @@
             if (activeProbIdx < SESSION_PROBLEMS.length - 1) selectProblem(activeProbIdx + 1);
         }
 
-        function toggleConsole() {
-            const cp = document.getElementById('console-pane');
-            cp.classList.toggle('hidden');
-        }
-
-        function formatErrorMessage(msg) {
-            if (!msg) return "";
-            return msg.replace(/Exception in thread "main" /g, '')
-                .replace(/java\.lang\.|java\.util\./g, '')
-                .replace(/at .*?\(.*?\)/g, '')
-                .replace(/\(.*?\.java:.*?\)/g, '')
-                .replace(/:[0-9]+/g, '')
-                .replace(/[a-zA-Z0-9_$]+\.[a-zA-Z0-9_$]+\s/g, '').trim();
-        }
-
         function runCode() {
-            if (!student.lang) { alert("Please select a programming language first."); return; }
             const p = SESSION_PROBLEMS[activeProbIdx];
             const currentCode = document.getElementById('code-editor').value;
             const out = document.getElementById('console-output');
             out.innerHTML = '<span style="color: grey;">Compiling and running...</span>\n\n';
             setTimeout(() => {
                 if (currentCode.trim() === p.initialCode.trim()) {
-                    out.innerHTML += `<span class="error-text">Error: ${formatErrorMessage(p.bugOutput)}</span>`;
+                    out.innerHTML += `<span class="error-text">Bug still present! Check logic again.</span>`;
                     solvedProblemIds.delete(p.id);
                     document.getElementById(`dot-${p.id}`).classList.remove('solved');
                 } else {
-                    out.innerHTML += `<span class="success-text">Output Match! Bug potentially resolved.\nVerification passed for hidden test cases.</span>`;
+                    out.innerHTML += `<span class="success-text">Output Match! Bug potentially resolved.</span>`;
                     document.getElementById(`dot-${p.id}`).classList.add('solved');
                     solvedProblemIds.add(p.id);
                 }
@@ -1057,11 +987,12 @@
         }
 
         async function finishChallenge(isAuto = false, isViolation = false) {
-            if (!student.lang) { alert("Please select a language before finishing."); return; }
             if (solvedProblemIds.size === 0 && !isAuto && !isViolation) { alert("Solve at least one problem correctly."); return; }
-            if (!isAuto && !isViolation && !confirm("Finish and submit?")) return;
-            examStarted = false;
+            if (!isAuto && !isViolation && !confirm(`Finish and submit results for Round ${currentRound}?`)) return;
+
             const timeDiff = Math.floor((new Date() - startTime) / 1000);
+
+            // Prepare summary UI (Intermediate if Round 1)
             document.getElementById('sum-name').innerText = student.name;
             document.getElementById('sum-roll').innerText = student.roll;
             document.getElementById('sum-code').innerText = student.code;
@@ -1069,18 +1000,41 @@
             document.getElementById('sum-duration').innerText = `${Math.floor(timeDiff / 60)}m ${timeDiff % 60}s`;
             document.getElementById('sum-attempted').innerText = `${attemptedProblemIds.size}/${SESSION_PROBLEMS.length}`;
             document.getElementById('sum-solved').innerText = `${solvedProblemIds.size}/${SESSION_PROBLEMS.length}`;
-            document.getElementById('competition-screen').classList.remove('active');
-            document.getElementById('summary-screen').classList.add('active');
-            document.getElementById('user-display').classList.add('hidden');
-            submitResultToDB(timeDiff);
-            if (document.fullscreenElement) document.exitFullscreen();
+
+            // Database Submission
+            await submitResultToDB(timeDiff);
+
+            if (currentRound === 1 && !isViolation) {
+                // Show Round 1 Summary with "Start Round 2"
+                document.getElementById('competition-screen').classList.remove('active');
+                document.getElementById('summary-screen').classList.add('active');
+                const btn = document.querySelector('#summary-screen .btn');
+                btn.innerText = "Start Round 2: Java";
+                btn.onclick = () => {
+                    document.getElementById('summary-screen').classList.remove('active');
+                    document.getElementById('competition-screen').classList.add('active');
+                    initRound(2);
+                    startTime = new Date(); // Reset time for Round 2
+                };
+            } else {
+                // Final Summary
+                document.getElementById('competition-screen').classList.remove('active');
+                document.getElementById('summary-screen').classList.add('active');
+                document.getElementById('user-display').classList.add('hidden');
+                const btn = document.querySelector('#summary-screen .btn');
+                btn.innerText = "View Event Leaderboard";
+                btn.onclick = showLeaderboard;
+                if (document.fullscreenElement) document.exitFullscreen();
+                examStarted = false;
+            }
         }
 
         async function submitResultToDB(timeSpent) {
             const payload = {
                 name: student.name, rollNumber: student.roll, department: student.dept,
-                uniqueCode: student.code, language: student.lang, timeSpentSeconds: timeSpent,
-                attemptedCount: attemptedProblemIds.size, solvedCount: solvedProblemIds.size
+                uniqueCode: student.code, round: currentRound, language: student.lang,
+                timeSpentSeconds: timeSpent, attemptedCount: attemptedProblemIds.size,
+                solvedCount: solvedProblemIds.size
             };
             try {
                 const res = await fetch('/api/submit', {
@@ -1091,11 +1045,35 @@
                 if (res.ok) {
                     document.getElementById('sum-db-box').style.display = 'block';
                     document.getElementById('sum-db-id').innerText = result.id;
-                    alert("Submission Successful!");
-                } else {
-                    alert("Submission failed: " + (result.details || result.error));
                 }
-            } catch (e) { alert("Error connecting to server."); }
+            } catch (e) { console.error("Sync Error:", e); }
+        }
+
+        function setupSecurity() {
+            window.addEventListener('blur', recordViolation);
+            document.addEventListener('visibilitychange', () => { if (document.hidden) recordViolation(); });
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('keydown', e => {
+                if ((e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'u')) || e.key === 'F12') e.preventDefault();
+            });
+        }
+
+        function recordViolation() {
+            if (!examStarted) return;
+            violations++;
+            document.getElementById('violation-count').innerText = `Warnings: ${violations}/2`;
+            document.getElementById('violation-count').style.display = 'block';
+            if (violations === 1) {
+                const w = document.getElementById('violation-warning');
+                w.style.display = 'block';
+                setTimeout(() => w.style.display = 'none', 5000);
+            } else if (violations >= 2) { terminateSession(); }
+        }
+
+        function terminateSession() {
+            examStarted = false;
+            alert("Session terminated due to violations.");
+            finishChallenge(true, true);
         }
 
         async function showLeaderboard() {
@@ -1107,9 +1085,9 @@
                 const data = await res.json();
                 if (res.ok) {
                     if (data.length === 0) { content.innerHTML = '<p>No results yet.</p>'; return; }
-                    let html = `<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Name</th><th>Solved</th><th>Time</th></tr></thead><tbody>`;
+                    let html = `<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Name</th><th>R</th><th>Solved</th><th>Time</th></tr></thead><tbody>`;
                     data.forEach((r, i) => {
-                        html += `<tr><td>#${i + 1}</td><td>${r.name}<br><small>${r.roll_number}</small></td><td>${r.solved_count}/10</td><td>${Math.floor(r.time_spent_seconds / 60)}m ${r.time_spent_seconds % 60}s</td></tr>`;
+                        html += `<tr><td>#${i + 1}</td><td>${r.name}<br><small>${r.roll_number}</small></td><td>R${r.round || 1}</td><td>${r.solved_count}/10</td><td>${Math.floor(r.time_spent_seconds / 60)}m</td></tr>`;
                     });
                     content.innerHTML = html + '</tbody></table>';
                 }
@@ -1118,21 +1096,18 @@
 
         function closeLeaderboard() { document.getElementById('leaderboard-modal').classList.remove('active'); }
         function startTimer() {
-            const display = document.getElementById('timer-display');
-            const interval = setInterval(() => {
-                if (!examStarted) { clearInterval(interval); return; }
+            const d = document.getElementById('timer-display');
+            const itv = setInterval(() => {
+                if (!examStarted) { clearInterval(itv); return; }
                 timeLeft--;
                 const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
-                display.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-                if (timeLeft <= 0) { clearInterval(interval); finishChallenge(true); }
+                d.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                if (timeLeft <= 0) { clearInterval(itv); finishChallenge(true); }
             }, 1000);
         }
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
+
+        function toggleConsole() { document.getElementById('console-pane').classList.toggle('hidden'); }
+        function changeLanguage() { /* Disabled for rounds */ }
     </script>
 </body>
 
