@@ -1,30 +1,47 @@
-import { neon } from '@neondatabase/serverless';
+import mongoose from 'mongoose';
+
+// Define the Result Schema (should be consistent with submit.js)
+const ResultSchema = new mongoose.Schema({
+    name: String,
+    rollNumber: String,
+    department: String,
+    uniqueCode: String,
+    language: String,
+    timeSpentSeconds: Number,
+    attemptedCount: Number,
+    solvedCount: Number,
+    createdAt: { type: Date, default: Date.now }
+});
+
+const Result = mongoose.models.Result || mongoose.model('Result', ResultSchema);
+
+const connectDB = async () => {
+    if (mongoose.connection.readyState >= 1) return;
+    if (!process.env.MONGODB_URI) {
+        throw new Error('MONGODB_URI is not defined in .env.local');
+    }
+    return mongoose.connect(process.env.MONGODB_URI);
+};
 
 export default async function handler(req, res) {
     if (req.method !== 'GET') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    if (!process.env.DATABASE_URL) {
-        return res.status(500).json({ error: 'Internal Server Error', details: 'DATABASE_URL is not defined.' });
-    }
-
-    const sql = neon(process.env.DATABASE_URL);
-
     try {
-        const data = await sql`
-            SELECT name, roll_number, solved_count, time_spent_seconds 
-            FROM results 
-            ORDER BY solved_count DESC, time_spent_seconds ASC 
-            LIMIT 50
-        `;
+        await connectDB();
 
-        // Normalize field names if necessary (sql results use snake_case by default based on schema)
+        const data = await Result.find()
+            .select('name rollNumber solvedCount timeSpentSeconds')
+            .sort({ solvedCount: -1, timeSpentSeconds: 1 })
+            .limit(50);
+
+        // Normalize field names to match what the frontend expects (snake_case from previous SQL version)
         const formattedData = data.map(row => ({
             name: row.name,
-            roll_number: row.roll_number,
-            solved_count: row.solved_count,
-            time_spent_seconds: row.time_spent_seconds
+            roll_number: row.rollNumber,
+            solved_count: row.solvedCount,
+            time_spent_seconds: row.timeSpentSeconds
         }));
 
         return res.status(200).json(formattedData);
