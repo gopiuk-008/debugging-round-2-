@@ -518,7 +518,7 @@
 <body>
     <div class="app-container">
         <header>
-            <div class="logo">
+            <div class="logo" onclick="handleAdminTrigger()" style="cursor: default;">
                 <img src="https://leetcode.com/_next/static/images/logo-ff2b712834cf2648aed76c46a67041ca.png" width="24"
                     height="24" style="filter: brightness(0) invert(1) hue-rotate(180deg) saturate(5);">
                 INEXON'26 DEBUG
@@ -698,8 +698,6 @@
                                 --</div>
                         </div>
                     </div>
-                    <button class="btn" style="width: auto; padding: 0.8rem 2.5rem;" onclick="showLeaderboard()">View
-                        Leaderboard</button>
                     <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-secondary);">Screenshot this page
                         for your records.</p>
                 </div>
@@ -1076,7 +1074,34 @@
             finishChallenge(true, true);
         }
 
+        let isAdmin = false;
+        let logoClicks = 0;
+
+        function handleAdminTrigger() {
+            logoClicks++;
+            if (logoClicks >= 5) {
+                logoClicks = 0;
+                adminLogin();
+            }
+            // Reset clicks after 2 seconds
+            setTimeout(() => { logoClicks = 0; }, 2000);
+        }
+
+        function adminLogin() {
+            const pass = prompt("Enter Admin Password:");
+            if (pass === "admin123") {
+                isAdmin = true;
+                alert("Admin access granted.");
+                showLeaderboard();
+            } else if (pass !== null) {
+                alert("Incorrect password.");
+            }
+        }
+
         async function showLeaderboard() {
+            if (!isAdmin) {
+                return; // Silently fail for non-admins if they somehow trigger it
+            }
             document.getElementById('leaderboard-modal').classList.add('active');
             const content = document.getElementById('leaderboard-content');
             content.innerHTML = '<p style="color: grey;">Loading scores...</p>';
