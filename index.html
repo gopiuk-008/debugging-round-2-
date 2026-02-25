@@ -791,6 +791,7 @@
         let solvedProblemIds = new Set();
         let attemptedProblemIds = new Set();
         let userSubmissions = {};
+        let hasSubmitted = false; // Guard: prevent duplicate DB submissions
 
         function validateReg() {
             const name = document.getElementById('reg-name').value;
@@ -911,8 +912,10 @@
         }
 
         async function finishChallenge(isAuto = false, isViolation = false) {
+            if (hasSubmitted) return; // Prevent duplicate submissions
             if (solvedProblemIds.size === 0 && !isAuto && !isViolation) { alert("Solve at least one problem correctly."); return; }
             if (!isAuto && !isViolation && !confirm(`Finish and submit results for Round ${currentRound}?`)) return;
+            hasSubmitted = true; // Lock to prevent re-entry
 
             const timeDiff = Math.floor((new Date() - startTime) / 1000);
 
@@ -942,9 +945,12 @@
         }
 
         async function submitResultToDB(timeSpent) {
+            // Read language from dropdown at submit time to avoid stale value
+            const langDropdown = document.getElementById('workspace-lang');
+            const finalLang = (langDropdown && langDropdown.value) ? langDropdown.value : student.lang;
             const payload = {
                 name: student.name, rollNumber: student.roll, department: student.dept,
-                round: currentRound, language: student.lang,
+                round: currentRound, language: finalLang,
                 timeSpentSeconds: timeSpent, attemptedCount: attemptedProblemIds.size,
                 solvedCount: solvedProblemIds.size
             };
@@ -1062,7 +1068,10 @@
         }
 
         function toggleConsole() { document.getElementById('console-pane').classList.toggle('hidden'); }
-        function changeLanguage() { /* Disabled for rounds */ }
+        function changeLanguage() {
+            const val = document.getElementById('workspace-lang').value;
+            if (val) student.lang = val;
+        }
     </script>
 </body>
 
