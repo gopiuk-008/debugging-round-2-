@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LeetCode Debug | Arts & Science Event 2026</title>
-    <link rel="icon" type="image/png" href="media/logo.png">
+    <title>LeetCode Debug | College Event 2026</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap"
         rel="stylesheet">
@@ -59,54 +58,56 @@
         .logo {
             font-weight: 700;
             color: var(--accent-orange);
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 1.1rem;
-            letter-spacing: -0.5px;
         }
 
         .timer {
             font-family: var(--font-code);
             font-weight: 600;
-            color: var(--text-primary);
-            background: #333;
-            padding: 0.3rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
+            color: var(--accent-orange);
+        }
+
+        .main-workspace {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
         }
 
         /* Screens */
         .screen {
             display: none;
-            height: calc(100vh - 50px);
             width: 100%;
+            height: 100%;
         }
 
         .screen.active {
             display: flex;
         }
 
-        /* Registration */
+        /* Registration Screen */
         #registration-screen {
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            background: radial-gradient(circle at 50% 50%, #2c2c2c 0%, #1a1a1a 100%);
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
         }
 
         .reg-card {
             background: var(--bg-pane);
             padding: 2.5rem;
             border-radius: 12px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
             width: 100%;
             max-width: 450px;
-            border: 1px solid var(--border);
         }
 
         .reg-card h2 {
             margin-bottom: 0.5rem;
-            font-size: 1.8rem;
+            color: var(--accent-orange);
         }
 
         .reg-card p {
@@ -116,73 +117,58 @@
         }
 
         .input-group {
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
         }
 
         .input-group label {
             display: block;
             margin-bottom: 0.5rem;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.8rem;
             color: var(--text-secondary);
         }
 
         .input-group input,
         .input-group select {
             width: 100%;
+            padding: 0.75rem 1rem;
             background: #333;
             border: 1px solid var(--border);
-            padding: 0.8rem;
-            border-radius: 8px;
+            border-radius: 6px;
             color: white;
-            font-size: 0.95rem;
             outline: none;
-            transition: border-color 0.2s;
         }
 
-        .input-group input:focus,
-        .input-group select:focus {
+        .input-group input:focus {
             border-color: var(--accent-orange);
         }
 
         .btn {
             width: 100%;
-            padding: 0.8rem;
-            border-radius: 8px;
-            border: none;
+            padding: 0.75rem;
             background: var(--accent-orange);
-            color: black;
+            color: #000;
+            border: none;
+            border-radius: 6px;
             font-weight: 700;
-            font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.1s, filter 0.2s;
-            margin-top: 1rem;
-        }
-
-        .btn:hover {
-            filter: brightness(1.1);
-        }
-
-        .btn:active {
-            transform: scale(0.98);
+            transition: opacity 0.2s;
         }
 
         .btn:disabled {
-            background: #444;
-            color: #888;
+            opacity: 0.5;
             cursor: not-allowed;
-            filter: none;
         }
 
-        /* Workspace */
+        /* Competition Workspace */
         .workspace-layout {
             display: grid;
-            grid-template-columns: 260px 1fr;
+            grid-template-columns: 260px 1fr 1fr;
             width: 100%;
-            background: var(--bg-workspace);
-            gap: 1px;
+            height: 100%;
         }
 
+        /* Sidebar */
         .sidebar {
             background: var(--bg-pane);
             border-right: 1px solid var(--border);
@@ -192,12 +178,10 @@
 
         .sidebar-header {
             padding: 1rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
             border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
         }
 
         .problem-list {
@@ -206,24 +190,23 @@
         }
 
         .problem-item {
-            padding: 0.8rem 1rem;
-            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 1rem;
             cursor: pointer;
-            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 0.75rem;
+            font-size: 0.9rem;
             transition: background 0.2s;
         }
 
         .problem-item:hover {
-            background: #333;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .problem-item.active {
             background: rgba(255, 161, 22, 0.1);
-            color: var(--accent-orange);
-            font-weight: 600;
+            border-left: 3px solid var(--accent-orange);
         }
 
         .status-dot {
@@ -237,114 +220,36 @@
             background: var(--accent-green);
         }
 
-        .workspace-main {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 1px;
-            background: var(--border);
-        }
-
+        /* Pane Styling */
         .pane {
-            background: var(--bg-pane);
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            border-right: 1px solid var(--border);
         }
 
         .pane-header {
-            padding: 10px 1.5rem;
-            background: #1e1e1e;
+            height: 40px;
+            background: var(--bg-workspace);
             border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
             font-size: 0.85rem;
             font-weight: 600;
             color: var(--text-secondary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 44px;
         }
 
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .language-dropdown {
-            background: #2b2b2b;
-            color: #e6e6e6;
-            border: 1px solid #444;
-            border-radius: 4px;
-            padding: 4px 10px;
-            font-size: 0.8rem;
-            outline: none;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-
-        .language-dropdown:hover {
-            border-color: #666;
-        }
-
-        .language-dropdown:focus {
-            border-color: var(--accent-orange);
-        }
-
-        .btn-action {
-            background: #333;
-            color: white;
-            border: 1px solid #444;
-            border-radius: 4px;
-            padding: 4px 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-action:hover {
-            background: #444;
-        }
-
-        .btn-action.run {
-            color: var(--accent-green);
-            background: rgba(45, 181, 93, 0.1);
-            border-color: rgba(45, 181, 93, 0.3);
-        }
-
-        .btn-action.run:hover {
-            background: rgba(45, 181, 93, 0.2);
-        }
-
-        .btn-action.submit {
-            background: var(--accent-blue);
-            border-color: transparent;
-        }
-
-        .btn-action.submit:hover {
-            filter: brightness(1.1);
-        }
-
-        .btn-action.finish {
-            background: var(--accent-green);
-            border-color: transparent;
-        }
-
-        .btn-action:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .desc-content {
+        /* Description Pane */
+        #description-pane {
+            background: var(--bg-dark);
             padding: 1.5rem;
             overflow-y: auto;
-            font-size: 0.95rem;
-            line-height: 1.6;
         }
 
-        .desc-content h2 {
+        #description-pane h2 {
             margin-bottom: 1rem;
-            font-size: 1.4rem;
+            font-size: 1.25rem;
         }
 
         .difficulty {
@@ -352,67 +257,73 @@
             padding: 0.2rem 0.6rem;
             border-radius: 12px;
             font-size: 0.75rem;
-            font-weight: 600;
             margin-bottom: 1rem;
         }
 
         .difficulty.easy {
-            background: rgba(45, 181, 93, 0.15);
             color: var(--accent-green);
+            background: rgba(45, 181, 93, 0.1);
         }
 
         .difficulty.medium {
-            background: rgba(255, 184, 0, 0.15);
-            color: #ffb800;
+            color: var(--accent-orange);
+            background: rgba(255, 161, 22, 0.1);
+        }
+
+        .desc-content p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
 
         .example-block {
-            background: #333;
+            background: rgba(255, 255, 255, 0.05);
             padding: 1rem;
             border-radius: 8px;
+            margin-bottom: 1rem;
             font-family: var(--font-code);
-            margin: 1rem 0;
             font-size: 0.85rem;
-            color: #ccc;
         }
 
+        /* Editor Pane */
         .editor-container {
             flex: 1;
             position: relative;
             background: #1e1e1e;
         }
 
-        #code-editor {
+        textarea#code-editor {
             width: 100%;
             height: 100%;
             background: transparent;
-            color: #dcdcdc;
+            color: #d4d4d4;
             font-family: var(--font-code);
             font-size: 14px;
-            padding: 1.5rem;
             border: none;
+            padding: 1.5rem;
             resize: none;
             outline: none;
-            line-height: 1.5;
         }
 
+        /* Console Pane */
         .console-pane {
+            height: 180px;
             background: var(--bg-pane);
+            border-top: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            height: 180px;
-            border-top: 1px solid var(--border);
+            transition: height 0.3s;
         }
 
         .console-output {
-            padding: 1rem 1.5rem;
-            font-family: var(--font-code);
-            font-size: 0.85rem;
-            color: #00ff00;
-            overflow-y: auto;
             flex: 1;
+            background: #000;
+            color: #fff;
+            font-family: var(--font-code);
+            padding: 1rem;
+            font-size: 0.85rem;
+            overflow-y: auto;
             white-space: pre-wrap;
-            background: #111;
         }
 
         .error-text {
@@ -420,10 +331,85 @@
         }
 
         .success-text {
-            color: #2db55d;
+            color: var(--accent-green);
         }
 
-        /* Summary & Overlays */
+        /* Controls */
+        .workspace-footer {
+            height: 50px;
+            background: var(--bg-pane);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .control-btns {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-run {
+            background: #333;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .btn-submit {
+            background: var(--accent-green);
+            color: white;
+            padding: 0.4rem 1.5rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Summary Screen */
+        #summary-screen {
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 2rem;
+            overflow-y: auto;
+        }
+
+        .summary-card {
+            background: var(--bg-pane);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .stat-box {
+            background: #333;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Rules Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -446,82 +432,66 @@
             background: var(--bg-pane);
             padding: 2.5rem;
             border-radius: 12px;
+            border: 1px solid var(--border);
             width: 90%;
-            max-width: 550px;
-            border: 1px solid var(--border);
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
-        .summary-card {
-            background: var(--bg-pane);
-            padding: 3rem;
-            border-radius: 16px;
-            text-align: center;
-            max-width: 700px;
-            border: 1px solid var(--border);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-        }
-
-        .summary-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .stat-box {
-            background: #333;
-            padding: 1.2rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.4rem;
-            text-transform: uppercase;
-        }
-
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .leaderboard-table th,
-        .leaderboard-table td {
+        .rules-list {
             text-align: left;
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
+            margin: 1.5rem 0;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
         }
 
-        .hidden {
-            display: none !important;
+        .rules-list li {
+            margin-bottom: 0.8rem;
         }
 
+        /* Violation Warning */
         #violation-warning {
             position: fixed;
-            top: 2rem;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: #ff5f56;
             color: white;
             padding: 1rem 2rem;
             border-radius: 8px;
-            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
             z-index: 2000;
             display: none;
-            box-shadow: 0 10px 30px rgba(255, 95, 86, 0.4);
+            font-weight: 600;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translate(-50%, -100%);
+            }
+
+            to {
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 
 <body>
+
     <div class="app-container">
         <header>
-            <div class="logo" onclick="handleAdminTrigger()"
-                style="cursor: default; display: flex; align-items: center; gap: 0.8rem;">
-                <img src="media/logo.png" height="32" style="object-fit: contain;">
+            <div class="logo">
+                <img src="https://leetcode.com/_next/static/images/logo-ff2b712834cf2648aed76c46a67041ca.png" width="24"
+                    height="24" style="filter: brightness(0) invert(1) hue-rotate(180deg) saturate(5);">
                 INEXON'26 DEBUG
             </div>
             <div id="user-display" class="hidden" style="display: flex; align-items: center; gap: 1rem;">
@@ -559,26 +529,13 @@
             </div>
         </div>
 
-        <!-- Leaderboard Modal -->
-        <div id="leaderboard-modal" class="modal-overlay">
-            <div class="modal-card" style="max-width: 700px;">
-                <h2
-                    style="color: var(--accent-orange); display: flex; justify-content: space-between; align-items: center;">
-                    Event Leaderboard
-                    <span style="cursor: pointer; font-size: 1.2rem;" onclick="closeLeaderboard()">✖</span>
-                </h2>
-                <div id="leaderboard-content">
-                    <p style="color: var(--text-secondary); margin-top: 1rem;">Loading scores...</p>
-                </div>
-                <button class="btn" style="margin-top: 1.5rem;" onclick="closeLeaderboard()">Close</button>
-            </div>
-        </div>
-
         <main class="main-workspace">
+            <!-- 1. Registration Screen -->
             <section id="registration-screen" class="screen active">
                 <div class="reg-card">
                     <h2>Event Registration</h2>
                     <p>Enter your details to start the debugging challenge</p>
+
                     <div class="input-group">
                         <label>Full Name</label>
                         <input type="text" id="reg-name" placeholder="Name" oninput="validateReg()">
@@ -591,122 +548,107 @@
                         <label>Department</label>
                         <select id="reg-dept" onchange="validateReg()">
                             <option value="">Select Dept</option>
-                            <option value="BCA">BCA</option>
-                            <option value="B.Sc (CS)">B.Sc (CS)</option>
-                            <option value="B.Sc (IT)">B.Sc (IT)</option>
-                            <option value="B.Sc (AI & DS)">B.Sc (AI & DS)</option>
-                            <option value="B.Sc (Maths)">B.Sc (Maths)</option>
-                            <option value="B.Sc (Physics)">B.Sc (Physics)</option>
+                            <option value="CSE">CSE</option>
+                            <option value="IT">IT</option>
+                            <option value="ECE">ECE</option>
+                            <option value="MECH">MECH</option>
                         </select>
                     </div>
                     <button id="start-btn" class="btn" disabled onclick="startChallenge()">Enter Workspace</button>
                 </div>
             </section>
 
+            <!-- 2. Competition Workspace -->
             <section id="competition-screen" class="screen">
                 <div class="workspace-layout">
+                    <!-- Sidebar -->
                     <aside class="sidebar">
-                        <div class="sidebar-header">PROBLEMS (0)</div>
-                        <div class="problem-list" id="problem-list"></div>
+                        <div class="sidebar-header">PROBLEMS (10)</div>
+                        <div class="problem-list" id="problem-list">
+                            <!-- Items generated by JS -->
+                        </div>
                     </aside>
 
-                    <div class="workspace-main">
-                        <div class="pane">
-                            <div class="pane-header">Description</div>
-                            <div id="description-pane" class="desc-content">
-                                <h2 id="prob-title">Selecting Problem...</h2>
-                                <div id="prob-meta"></div>
-                                <div id="prob-desc">
-                                    <p>Select a problem from the left to begin.</p>
-                                </div>
+                    <!-- Description Pane -->
+                    <div class="pane">
+                        <div class="pane-header">Description</div>
+                        <div id="description-pane">
+                            <h2 id="prob-title">Selecting Problem...</h2>
+                            <div id="prob-meta"></div>
+                            <div id="prob-desc" class="desc-content">
+                                <p>Select a problem from the left to begin.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Editor Pane -->
+                    <div class="pane" style="border-right: none;">
+                        <div class="pane-header">Code Editor</div>
+                        <div class="editor-container">
+                            <textarea id="code-editor" spellcheck="false"
+                                placeholder="// Write/Fix code here..."></textarea>
+                        </div>
+
+                        <div class="console-pane" id="console-pane">
+                            <div class="pane-header" style="justify-content: space-between;">
+                                <span>Console</span>
+                                <span style="cursor: pointer;" onclick="toggleConsole()">✖</span>
+                            </div>
+                            <div class="console-output" id="console-output">
+                                Click "Run" to see output.
                             </div>
                         </div>
 
-                        <div class="pane" style="border-right: none;">
-                            <div class="pane-header">
-                                <span>Code</span>
-                                <div class="header-actions">
-                                    <select id="workspace-lang" class="language-dropdown" onchange="changeLanguage()">
-                                        <option value="">Select Language</option>
-                                        <option value="Java">Java</option>
-                                        <option value="C">C</option>
-                                    </select>
-                                    <button class="btn-action run" onclick="runCode()">Run</button>
-                                    <button id="next-btn" class="btn-action submit"
-                                        onclick="nextProblem()">Next</button>
-                                    <button id="finish-btn" class="btn-action finish" onclick="finishChallenge()"
-                                        style="display: none;">Submit</button>
-                                </div>
-                            </div>
-                            <div class="editor-container">
-                                <textarea id="code-editor" spellcheck="false"
-                                    placeholder="// Write/Fix code here..."></textarea>
-                            </div>
-
-                            <div class="console-pane" id="console-pane">
-                                <div class="pane-header"
-                                    style="justify-content: space-between; height: 36px; padding: 0 1rem;">
-                                    <span>Console</span>
-                                    <span style="cursor: pointer;" onclick="toggleConsole()">✖</span>
-                                </div>
-                                <div class="console-output" id="console-output">
-                                    Click "Run" to see output.
-                                </div>
+                        <div class="workspace-footer">
+                            <button class="btn-run" onclick="toggleConsole()">Console</button>
+                            <div class="control-btns">
+                                <button class="btn-run" onclick="runCode()">Run Code</button>
+                                <button id="next-btn" class="btn-submit" onclick="nextProblem()"
+                                    style="background: var(--accent-blue);">Next Question</button>
+                                <button id="finish-btn" class="btn-submit" onclick="submitExam()"
+                                    style="display: none;">Finish Event</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
+            <!-- 3. Summary Screen -->
             <section id="summary-screen" class="screen">
                 <div class="summary-card">
                     <h1 style="color: var(--accent-green); margin-bottom: 1rem;">Submission Recorded</h1>
                     <p style="color: var(--text-secondary);">Congratulations on completing the 2026 Debugging Event.</p>
+
                     <div class="summary-stats">
                         <div class="stat-box">
                             <div class="stat-label">Participant</div>
                             <div id="sum-name" style="font-weight: 600;">--</div>
                         </div>
                         <div class="stat-box">
-                            <div class="stat-label">Roll Number</div>
-                            <div id="sum-roll" style="font-weight: 600; color: var(--accent-orange);">--</div>
-                        </div>
-                        <div class="stat-box">
                             <div class="stat-label">Unique ID</div>
                             <div id="sum-code" style="color: var(--accent-orange);">--</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">Language</div>
-                            <div id="sum-lang" style="font-weight: 600; color: var(--accent-blue);">--</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">Problems Attempted</div>
-                            <div id="sum-attempted">0/10</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">Problems Solved</div>
-                            <div id="sum-solved" style="color: var(--accent-green); font-weight: 700;">0/10</div>
                         </div>
                         <div class="stat-box">
                             <div class="stat-label">Duration</div>
                             <div id="sum-duration">--</div>
                         </div>
-                        <div class="stat-box" id="sum-db-box"
-                            style="display: none; border-color: var(--accent-orange);">
-                            <div class="stat-label">Database Record ID</div>
-                            <div id="sum-db-id"
-                                style="font-family: var(--font-code); color: var(--accent-orange); font-size: 0.9rem;">
-                                --</div>
+                        <div class="stat-box">
+                            <div class="stat-label">Problems Attempted</div>
+                            <div id="sum-solved">0/10</div>
                         </div>
                     </div>
-                    <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-secondary);">Screenshot this page
-                        for your records.</p>
+
+                    <button class="btn" style="margin-top: 2rem; width: auto; padding: 0.75rem 2rem;"
+                        onclick="location.reload()">Return Home</button>
                 </div>
             </section>
         </main>
     </div>
 
     <script>
+        // ==========================================
+        // PROBLEMS DATA
+        // ==========================================
         const PROBLEMS = [
             {
                 id: 1, lang: 'Java', title: 'Fibonacci Sequence', diff: 'Easy',
@@ -780,17 +722,27 @@
             }
         ];
 
-        let ALL_PROBLEMS = [...PROBLEMS];
-        let SESSION_PROBLEMS = [];
+        // ==========================================
+        // STATE
+        // ==========================================
+        let student = { name: '', roll: '', dept: '', code: '' };
         let activeProbIdx = -1;
-        let student = { name: '', roll: '', dept: '', code: '', lang: '' };
-        let currentRound = 2;
-        let examStarted = false;
-        let startTime, timeLeft = 1800;
+        let userSubmissions = {}; // id -> code
+        let timeLeft = 30 * 60;
+        let timerStarted = false;
+        let startTime = null;
         let violations = 0;
-        let solvedProblemIds = new Set();
-        let attemptedProblemIds = new Set();
-        let userSubmissions = {};
+        let examStarted = false;
+
+        // ==========================================
+        // CORE LOGIC
+        // ==========================================
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
 
         function validateReg() {
             const name = document.getElementById('reg-name').value;
@@ -803,249 +755,293 @@
             student.name = document.getElementById('reg-name').value;
             student.roll = document.getElementById('reg-roll').value;
             student.dept = document.getElementById('reg-dept').value;
-            student.code = `DBG26-${student.dept.substring(0, 2).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+            student.code = `DBG26-${student.dept.substring(0, 2)}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+            // Show rules modal instead of workspace directly
             document.getElementById('rules-modal').classList.add('active');
         }
 
         function agreeRules() {
             const elem = document.documentElement;
-            if (elem.requestFullscreen) elem.requestFullscreen();
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+
             document.getElementById('rules-modal').classList.remove('active');
             enterWorkspace();
         }
 
         function enterWorkspace() {
-            examStarted = true;
             startTime = new Date();
+            examStarted = true;
+
+            // Shuffle problems for this session
+            shuffleArray(PROBLEMS);
+
+            // Update UI
             document.getElementById('header-name').innerText = student.name;
             document.getElementById('header-code').innerText = student.code;
             document.getElementById('user-display').classList.remove('hidden');
             document.getElementById('registration-screen').classList.remove('active');
             document.getElementById('competition-screen').classList.add('active');
-            initRound();
-            startTimer();
-            setupSecurity();
-        }
-
-        function initRound() {
-            student.lang = 'Java';
-            SESSION_PROBLEMS = ALL_PROBLEMS;
-
-            // UI updates
-            const langSelect = document.getElementById('workspace-lang');
-            if (langSelect) {
-                langSelect.innerHTML = '<option value="Java">Java</option>';
-                langSelect.value = 'Java';
-                langSelect.disabled = true;
-            }
-            document.querySelector('.sidebar-header').innerText = `Java Debugging (${SESSION_PROBLEMS.length})`;
 
             initProblemsList();
+            startTimer();
             selectProblem(0);
-        }
-
-        function initProblemsList() {
-            const list = document.getElementById('problem-list');
-            list.innerHTML = '';
-            SESSION_PROBLEMS.forEach((p, i) => {
-                const div = document.createElement('div');
-                div.className = 'problem-item';
-                div.id = `prob-item-${i}`;
-                div.onclick = () => { selectProblem(i); };
-                div.innerHTML = `<span class="status-dot" id="dot-${p.id}"></span> ${i + 1}. ${p.title}`;
-                list.appendChild(div);
-            });
-        }
-
-        function selectProblem(idx) {
-            if (SESSION_PROBLEMS.length === 0) return;
-            if (activeProbIdx !== -1) {
-                userSubmissions[SESSION_PROBLEMS[activeProbIdx].id] = document.getElementById('code-editor').value;
-            }
-            activeProbIdx = idx;
-            const p = SESSION_PROBLEMS[idx];
-            attemptedProblemIds.add(p.id);
-            document.querySelectorAll('.problem-item').forEach(el => el.classList.remove('active'));
-            const activeItem = document.getElementById(`prob-item-${idx}`);
-            if (activeItem) activeItem.classList.add('active');
-            document.getElementById('prob-title').innerText = `${idx + 1}. ${p.title}`;
-            document.getElementById('prob-meta').innerHTML = `<span class="difficulty ${p.diff.toLowerCase()}">${p.diff}</span>`;
-            document.getElementById('prob-desc').innerHTML = `<p>${p.desc}</p><div class="example-block">${p.example}</div>`;
-            document.getElementById('code-editor').value = userSubmissions[p.id] || p.initialCode;
-            document.getElementById('console-output').innerText = 'Click "Run" to see output.';
-
-            const nextBtn = document.getElementById('next-btn');
-            const finishBtn = document.getElementById('finish-btn');
-            if (activeProbIdx === SESSION_PROBLEMS.length - 1) {
-                nextBtn.style.display = 'none';
-                finishBtn.style.display = 'block';
-                finishBtn.innerText = 'Final Submit';
-            } else {
-                nextBtn.style.display = 'inline-block';
-                finishBtn.style.display = 'none';
-            }
-        }
-
-        function nextProblem() {
-            if (activeProbIdx < SESSION_PROBLEMS.length - 1) selectProblem(activeProbIdx + 1);
-        }
-
-        function runCode() {
-            const p = SESSION_PROBLEMS[activeProbIdx];
-            const currentCode = document.getElementById('code-editor').value;
-            const out = document.getElementById('console-output');
-            out.innerHTML = '<span style="color: grey;">Compiling and running...</span>\n\n';
-            setTimeout(() => {
-                if (currentCode.trim() === p.initialCode.trim()) {
-                    out.innerHTML += `<span class="error-text">Bug still present! Check logic again.</span>`;
-                    solvedProblemIds.delete(p.id);
-                    document.getElementById(`dot-${p.id}`).classList.remove('solved');
-                } else {
-                    out.innerHTML += `<span class="success-text">Output Match! Bug potentially resolved.</span>`;
-                    document.getElementById(`dot-${p.id}`).classList.add('solved');
-                    solvedProblemIds.add(p.id);
-                }
-                userSubmissions[p.id] = currentCode;
-            }, 800);
-        }
-
-        async function finishChallenge(isAuto = false, isViolation = false) {
-            if (solvedProblemIds.size === 0 && !isAuto && !isViolation) { alert("Solve at least one problem correctly."); return; }
-            if (!isAuto && !isViolation && !confirm(`Finish and submit results for Round ${currentRound}?`)) return;
-
-            const timeDiff = Math.floor((new Date() - startTime) / 1000);
-
-            // Prepare summary UI (Intermediate if Round 1)
-            document.getElementById('sum-name').innerText = student.name;
-            document.getElementById('sum-roll').innerText = student.roll;
-            document.getElementById('sum-code').innerText = student.code;
-            document.getElementById('sum-lang').innerText = student.lang;
-            document.getElementById('sum-duration').innerText = `${Math.floor(timeDiff / 60)}m ${timeDiff % 60}s`;
-            document.getElementById('sum-attempted').innerText = `${attemptedProblemIds.size}/${SESSION_PROBLEMS.length}`;
-            document.getElementById('sum-solved').innerText = `${solvedProblemIds.size}/${SESSION_PROBLEMS.length}`;
-
-            // Database Submission
-            await submitResultToDB(timeDiff);
-
-            // Final Summary
-            document.getElementById('competition-screen').classList.remove('active');
-            document.getElementById('summary-screen').classList.add('active');
-            document.getElementById('user-display').classList.add('hidden');
-            const btn = document.querySelector('#summary-screen .btn');
-            if (btn) {
-                btn.innerText = "Close Summary";
-                btn.onclick = () => window.location.reload();
-            }
-            if (document.fullscreenElement) document.exitFullscreen();
-            examStarted = false;
-        }
-
-        async function submitResultToDB(timeSpent) {
-            const payload = {
-                name: student.name, rollNumber: student.roll, department: student.dept,
-                uniqueCode: student.code, round: currentRound, language: student.lang,
-                timeSpentSeconds: timeSpent, attemptedCount: attemptedProblemIds.size,
-                solvedCount: solvedProblemIds.size
-            };
-            try {
-                const res = await fetch('/api/submit', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await res.json();
-                if (res.ok) {
-                    document.getElementById('sum-db-box').style.display = 'block';
-                    document.getElementById('sum-db-id').innerText = result.id;
-                }
-            } catch (e) { console.error("Sync Error:", e); }
+            setupSecurity();
         }
 
         function setupSecurity() {
             window.addEventListener('blur', recordViolation);
-            document.addEventListener('visibilitychange', () => { if (document.hidden) recordViolation(); });
-            document.addEventListener('contextmenu', e => e.preventDefault());
-            document.addEventListener('keydown', e => {
-                if ((e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'u')) || e.key === 'F12') e.preventDefault();
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden') {
+                    recordViolation();
+                }
+            });
+
+            // Disable Right-Click
+            document.addEventListener('contextmenu', (e) => {
+                if (examStarted) e.preventDefault();
+            });
+
+            // Disable Copy, Paste, and Cut
+            document.addEventListener('copy', (e) => {
+                if (examStarted) e.preventDefault();
+            });
+            document.addEventListener('paste', (e) => {
+                if (examStarted) e.preventDefault();
+            });
+            document.addEventListener('cut', (e) => {
+                if (examStarted) e.preventDefault();
+            });
+
+            // Disable common shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (!examStarted) return;
+
+                // Disable Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+S, Ctrl+U, Ctrl+P
+                if (e.ctrlKey && (['c', 'v', 'x', 's', 'u', 'p'].includes(e.key.toLowerCase()))) {
+                    e.preventDefault();
+                }
+
+                // Disable F12 (DevTools)
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                }
+
+                // Disable Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (DevTools)
+                if (e.ctrlKey && e.shiftKey && (['i', 'j', 'c'].includes(e.key.toLowerCase()))) {
+                    e.preventDefault();
+                }
             });
         }
 
         function recordViolation() {
             if (!examStarted) return;
             violations++;
-            document.getElementById('violation-count').innerText = `Warnings: ${violations}/2`;
-            document.getElementById('violation-count').style.display = 'block';
+
+            const countDisplay = document.getElementById('violation-count');
+            countDisplay.innerText = `Warnings: ${violations}/2`;
+            countDisplay.style.display = 'block';
+
             if (violations === 1) {
-                const w = document.getElementById('violation-warning');
-                w.style.display = 'block';
-                setTimeout(() => w.style.display = 'none', 5000);
-            } else if (violations >= 2) { terminateSession(); }
+                const warning = document.getElementById('violation-warning');
+                warning.innerText = "Warning: Do not switch tabs during the assessment. Next violation will terminate your session.";
+                warning.style.display = 'block';
+                setTimeout(() => {
+                    warning.style.display = 'none';
+                }, 5000);
+            } else if (violations >= 2) {
+                terminateSession();
+            }
         }
 
         function terminateSession() {
             examStarted = false;
-            alert("Session terminated due to violations.");
-            finishChallenge(true, true);
+            alert("Session terminated due to multiple tab switching violations.");
+            submitExam(true, true);
         }
 
-        let isAdmin = false;
-        let logoClicks = 0;
-
-        function handleAdminTrigger() {
-            logoClicks++;
-            if (logoClicks >= 5) {
-                logoClicks = 0;
-                adminLogin();
-            }
-            // Reset clicks after 2 seconds
-            setTimeout(() => { logoClicks = 0; }, 2000);
+        function initProblemsList() {
+            const list = document.getElementById('problem-list');
+            list.innerHTML = '';
+            PROBLEMS.forEach((p, i) => {
+                const div = document.createElement('div');
+                div.className = 'problem-item';
+                div.id = `prob-item-${i}`;
+                // Direct selection disabled during exam
+                div.onclick = () => {
+                    if (!examStarted) selectProblem(i);
+                    else alert("Sequence navigation only. Use the Next button.");
+                };
+                div.innerHTML = `<span class="status-dot" id="dot-${p.id}"></span> ${i + 1}. [${p.lang}] ${p.title}`;
+                list.appendChild(div);
+            });
         }
 
-        function adminLogin() {
-            const pass = prompt("Enter Admin Password:");
-            if (pass === "admin123") {
-                isAdmin = true;
-                alert("Admin access granted.");
-                showLeaderboard();
-            } else if (pass !== null) {
-                alert("Incorrect password.");
+        function selectProblem(idx) {
+            if (activeProbIdx !== -1) {
+                userSubmissions[PROBLEMS[activeProbIdx].id] = document.getElementById('code-editor').value;
+            }
+
+            activeProbIdx = idx;
+            const p = PROBLEMS[idx];
+
+            document.querySelectorAll('.problem-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`prob-item-${idx}`).classList.add('active');
+
+            document.getElementById('prob-title').innerText = `${idx + 1}. ${p.title}`;
+            document.getElementById('prob-meta').innerHTML = `<span class="difficulty ${p.diff.toLowerCase()}">${p.diff}</span>`;
+            document.getElementById('prob-desc').innerHTML = `
+                <p>${p.desc}</p>
+                <div class="example-block">${p.example}</div>
+            `;
+
+            document.getElementById('code-editor').value = userSubmissions[p.id] || p.initialCode;
+            document.getElementById('console-output').innerText = 'Click "Run Code" to see output.';
+
+            // Visibility of Next vs Finish
+            const nextBtn = document.getElementById('next-btn');
+            const finishBtn = document.getElementById('finish-btn');
+
+            if (activeProbIdx === PROBLEMS.length - 1) {
+                nextBtn.style.display = 'none';
+                finishBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                finishBtn.style.display = 'none';
             }
         }
 
-        async function showLeaderboard() {
-            if (!isAdmin) {
-                return; // Silently fail for non-admins if they somehow trigger it
+        function nextProblem() {
+            if (activeProbIdx < PROBLEMS.length - 1) {
+                selectProblem(activeProbIdx + 1);
             }
-            document.getElementById('leaderboard-modal').classList.add('active');
-            const content = document.getElementById('leaderboard-content');
-            content.innerHTML = '<p style="color: grey;">Loading scores...</p>';
-            try {
-                const res = await fetch('/api/leaderboard');
-                const data = await res.json();
-                if (res.ok) {
-                    if (data.length === 0) { content.innerHTML = '<p>No results yet.</p>'; return; }
-                    let html = `<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Name</th><th>R</th><th>Solved</th><th>Time</th></tr></thead><tbody>`;
-                    data.forEach((r, i) => {
-                        html += `<tr><td>#${i + 1}</td><td>${r.name}<br><small>${r.roll_number}</small></td><td>R${r.round || 1}</td><td>${r.solved_count}/10</td><td>${Math.floor(r.time_spent_seconds / 60)}m</td></tr>`;
-                    });
-                    content.innerHTML = html + '</tbody></table>';
+        }
+
+        function toggleConsole() {
+            const cp = document.getElementById('console-pane');
+            cp.classList.toggle('hidden');
+        }
+
+        function runCode() {
+            const p = PROBLEMS[activeProbIdx];
+            const currentCode = document.getElementById('code-editor').value;
+            const out = document.getElementById('console-output');
+
+            document.getElementById('console-pane').classList.remove('hidden');
+            out.innerHTML = '<span style="color: grey;">Compiling and running...</span>\n\n';
+
+            setTimeout(() => {
+                if (currentCode.trim() === p.initialCode.trim()) {
+                    out.innerHTML += `<span class="error-text">${p.bugOutput}</span>`;
+                } else {
+                    out.innerHTML += `<span class="success-text">Output Match! Bug potentially resolved.\nVerification passed for hidden test cases.</span>`;
+                    document.getElementById(`dot-${p.id}`).classList.add('solved');
+                    userSubmissions[p.id] = currentCode;
                 }
-            } catch (e) { content.innerHTML = '<p>Connection error.</p>'; }
+            }, 800);
         }
 
-        function closeLeaderboard() { document.getElementById('leaderboard-modal').classList.remove('active'); }
+        function submitExam(isAuto = false, isViolation = false) {
+            if (!isAuto && !confirm("Are you sure you want to finish the event?")) return;
+
+            examStarted = false;
+            const endTime = new Date();
+            const diff = Math.floor((endTime - startTime) / 1000);
+            const mins = Math.floor(diff / 60);
+            const secs = diff % 60;
+
+            document.getElementById('sum-name').innerText = student.name;
+            document.getElementById('sum-code').innerText = student.code;
+            document.getElementById('sum-duration').innerText = `${mins}m ${secs}s`;
+            document.getElementById('sum-solved').innerText = `${Object.keys(userSubmissions).length}/10`;
+
+            const summaryCard = document.querySelector('.summary-card');
+
+            if (isViolation) {
+                const violMsg = document.createElement('div');
+                violMsg.style.background = '#ff5f5633';
+                violMsg.style.color = '#ff5f56';
+                violMsg.style.padding = '1rem';
+                violMsg.style.borderRadius = '8px';
+                violMsg.style.margin = '1rem 0';
+                violMsg.style.border = '1px solid #ff5f56';
+                violMsg.innerHTML = "<strong>CRITICAL: Session Terminated</strong><br>Multiple tab-switching violations detected.";
+                summaryCard.insertBefore(violMsg, document.querySelector('.summary-stats'));
+                document.querySelector('#summary-screen h1').innerText = "Session Terminated";
+                document.querySelector('#summary-screen h1').style.color = "#ff5f56";
+            } else if (isAuto) {
+                const autoMsg = document.createElement('p');
+                autoMsg.style.color = '#ff5f56';
+                autoMsg.style.marginTop = '1rem';
+                autoMsg.innerText = "Exam was auto-submitted as the time was up.";
+                summaryCard.insertBefore(autoMsg, document.querySelector('.summary-stats'));
+            }
+
+            document.getElementById('competition-screen').classList.remove('active');
+            document.getElementById('summary-screen').classList.add('active');
+            document.getElementById('user-display').classList.add('hidden');
+
+            // Store result in Database
+            submitResultToDB(diff);
+
+            // Exit fullscreen if active
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+        }
+
+        async function submitResultToDB(timeSpentSeconds) {
+            const data = {
+                name: student.name,
+                rollNumber: student.roll,
+                department: student.dept,
+                uniqueCode: student.code,
+                timeSpentSeconds: timeSpentSeconds,
+                solvedCount: Object.keys(userSubmissions).length
+            };
+
+            console.log("Submitting to database:", data);
+
+            try {
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    console.log("Database submission successful:", result);
+                } else {
+                    console.error("Database submission failed:", result.error);
+                }
+            } catch (error) {
+                console.error("Error submitting to database:", error);
+            }
+        }
+
         function startTimer() {
-            const d = document.getElementById('timer-display');
-            const itv = setInterval(() => {
-                if (!examStarted) { clearInterval(itv); return; }
+            const display = document.getElementById('timer-display');
+            const interval = setInterval(() => {
                 timeLeft--;
-                const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
-                d.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-                if (timeLeft <= 0) { clearInterval(itv); finishChallenge(true); }
+                const m = Math.floor(timeLeft / 60);
+                const s = timeLeft % 60;
+                display.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 300) display.style.color = '#ff5f56';
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    submitExam(true);
+                }
             }, 1000);
         }
 
-        function toggleConsole() { document.getElementById('console-pane').classList.toggle('hidden'); }
-        function changeLanguage() { /* Disabled for rounds */ }
     </script>
 </body>
 

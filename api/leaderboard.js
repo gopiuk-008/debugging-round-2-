@@ -14,7 +14,7 @@ const ResultSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-const Result = mongoose.models.Result || mongoose.model('Result', ResultSchema);
+const Result = mongoose.models.Result || mongoose.model('Result', ResultSchema, 'round-2');
 
 const connectDB = async () => {
     if (mongoose.connection.readyState >= 1) return;
