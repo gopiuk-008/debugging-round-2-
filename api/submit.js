@@ -14,8 +14,8 @@ const ResultSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-// Use existing model or create new one with collection name 'round-2'
-const Result = mongoose.models.Result || mongoose.model('Result', ResultSchema, 'round-2');
+// Use existing model or create new one with collection name 'result2'
+const Result = mongoose.models.Result || mongoose.model('Result', ResultSchema, 'result2');
 
 const connectDB = async () => {
     if (mongoose.connection.readyState >= 1) return;
